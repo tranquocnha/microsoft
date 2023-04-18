@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: postgres
+  template:
+    metadata:
+      labels:
+        service: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13-alpine
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-pvm
+      volumes:
+        - name: postgres-pvm
+          persistentVolumeClaim:
+            claimName: postgres-pvclaim
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: microsoft
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_URL: jdbc:postgresql://postgres:5432/microsoft?createDatabaseIfNotExist=true

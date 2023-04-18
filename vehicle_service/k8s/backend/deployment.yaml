@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-springboot-microsoft
+  labels:
+    app: docker-springboot-microsoft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-springboot-microsoft
+  template:
+    metadata:
+      labels:
+        app: docker-springboot-microsoft
+    spec:
+      containers:
+        - name: docker-springboot-microsoft
+          image: tranquocnha180800/docker-springboot-microsoft:v6
+          ports:
+            - containerPort: 80
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-springboot-microsoft
+spec:
+  selector:
+    app: docker-springboot-microsoft
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer

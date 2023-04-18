@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  app:
+    #    image: tranquocnha180800/docker-springboot-microsoft:v1
+    image: docker-springboot-microsoft
+    container_name: docker-springboot-microsoft
+    build: .
+    networks:
+      - spring-pgsql
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/microsoft?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+  #    restart: on-failure
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: dbpostgres
+    restart: always
+    networks:
+      - spring-pgsql
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=123123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=microsoft
+#    volumes:
+#      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+networks:
+  spring-pgsql:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
