@@ -12,7 +12,7 @@ jobs:
     steps:
 
      - uses: actions/checkout@v2
-     - run : docker-compose -f docker-compose-build.yaml build --parallel
+     - run : docker-compose -f docker-compose.yaml build --parallel
      - run : docker tag docker-springboot-microsoft:v11 tranquocnha180800/docker-springboot-microsoft:v11
      - run : echo "${{secrets.DOCKER_TOKEN}}" | docker login --username "${{secrets.DOCKER_USERNAME}}" --password-stdin   
      - run : docker push tranquocnha180800/docker-springboot-microsoft:v11
