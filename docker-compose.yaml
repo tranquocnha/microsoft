@@ -2,11 +2,11 @@ version: '3.1'
 
 services:
   app:
-    image: tranquocnha180800/docker-springboot-microsoft:v10
+    image: docker-springboot-microsoft:v11
     container_name: docker-springboot-microsoft
-#    build:
-#      context: ./vehicle_service/web
-#      dockerfile: Dockerfile
+   build:
+     context: ./vehicle_service/web
+     dockerfile: Dockerfile
     networks:
       - spring-pgsql
     ports:
