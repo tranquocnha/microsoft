@@ -4,9 +4,9 @@ services:
   app:
     image: docker-springboot-microsoft:v11
     container_name: docker-springboot-microsoft
-   build:
-     context: ./vehicle_service/web
-     dockerfile: Dockerfile
+    build:
+      context: ./vehicle_service/web
+      dockerfile: Dockerfile
     networks:
       - spring-pgsql
     ports:
