@@ -5,7 +5,11 @@ metadata:
   labels:
     app: docker-springboot-microsoft
 spec:
-  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 3
+    type: RollingUpdate
   selector:
     matchLabels:
       app: docker-springboot-microsoft
@@ -16,9 +20,11 @@ spec:
     spec:
       containers:
         - name: docker-springboot-microsoft
-          image: tranquocnha180800/docker-springboot-microsoft:v6
+          image: tranquocnha180800/docker-springboot-microsoft:v9
           ports:
-            - containerPort: 80
+            - name: http
+              containerPort: 8080
+              protocol: TCP
           env:
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
@@ -37,6 +43,7 @@ spec:
                   key: POSTGRES_USER
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: update
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -47,6 +54,6 @@ spec:
     app: docker-springboot-microsoft
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 8080
   type: LoadBalancer
