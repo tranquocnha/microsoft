@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: docker-springboot-microsoft
-          image: tranquocnha180800/docker-springboot-microsoft:v9
+          image: tranquocnha180800/docker-springboot-microsoft:v10
           ports:
             - name: http
               containerPort: 8080

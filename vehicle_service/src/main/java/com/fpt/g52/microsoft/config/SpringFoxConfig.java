@@ -9,6 +9,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig {
@@ -16,9 +19,12 @@ public class SpringFoxConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+//                .apis(RequestHandlerSelectors.basePackage(basePackage))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .directModelSubstitute(LocalDate.class, java.sql.Date.class)
+                .directModelSubstitute(LocalDateTime.class, java.util.Date.class)
+                .apiInfo(apiInfo());
     }
 
 //    @Bean
