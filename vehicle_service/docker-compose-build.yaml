@@ -3,4 +3,4 @@ services:
   backend_user:
     build:
       context: ./web
-    image: docker-springboot-microsoft:v11
+    image: docker-springboot-microsoft:v12

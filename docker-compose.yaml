@@ -2,11 +2,11 @@ version: '3.1'
 
 services:
   app:
-    image: docker-springboot-microsoft:v11
+    image: tranquocnha180800/docker-springboot-microsoft:v12
     container_name: docker-springboot-microsoft
-    build:
-      context: ./vehicle_service/web
-      dockerfile: Dockerfile
+#    build:
+#      context: ./vehicle_service/web
+#      dockerfile: Dockerfile
     networks:
       - spring-pgsql
     ports:
@@ -31,8 +31,8 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=microsoft
-    volumes:
-      - ./vehicle_service/db_init:/var/lib/postgresql/data
+#    volumes:
+#      - ./vehicle_service/db_init:/var/lib/postgresql/data
 
 networks:
   spring-pgsql:

@@ -13,6 +13,6 @@ jobs:
 
      - uses: actions/checkout@v2
      - run : docker-compose -f docker-compose-build.yaml build --parallel
-     - run : docker tag docker-springboot-microsoft:v11 tranquocnha180800/docker-springboot-microsoft:v11
+     - run : docker tag docker-springboot-microsoft:v12 tranquocnha180800/docker-springboot-microsoft:v12
      - run : echo "${{secrets.DOCKER_TOKEN}}" | docker login --username "${{secrets.DOCKER_USERNAME}}" --password-stdin   
-     - run : docker push tranquocnha180800/docker-springboot-microsoft:v11
+     - run : docker push tranquocnha180800/docker-springboot-microsoft:v12
