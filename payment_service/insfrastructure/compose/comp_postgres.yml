@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'admin'
+      POSTGRES_DB: 'postgres'
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./volumes/dbdata:/var/lib/postgresql/data"
