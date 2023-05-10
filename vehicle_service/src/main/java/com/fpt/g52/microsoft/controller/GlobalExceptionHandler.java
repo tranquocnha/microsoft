@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
