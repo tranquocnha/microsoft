@@ -1,4 +1,4 @@
-package com.fpt.g52.common_service.dto;
+package com.fpt.g52.common_service.dto.vehicle;
 
 import lombok.Data;
 
