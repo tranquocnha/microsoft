@@ -1,0 +1,24 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-pv-volume
+spec:
+  storageClassName: mystoragemcs
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/v1"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-pv-claim
+spec:
+  storageClassName: mystoragemcs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 150Mi

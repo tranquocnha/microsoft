@@ -1,6 +1,6 @@
 package com.fpt.g52.microsoft.controller;
 
-import com.fpt.g52.microsoft.model.DTO.VehiclesHourDTO;
+import com.fpt.g52.common_service.dto.vehicle.VehiclesHourDTO;
 import com.fpt.g52.microsoft.model.VehiclesHour;
 import com.fpt.g52.microsoft.repository.VehiclesHourRepository;
 import com.fpt.g52.microsoft.service.VehiclesHourService;
@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/api/vehicles")
 public class VehiclesHourController {
@@ -48,6 +49,17 @@ public class VehiclesHourController {
         return Collections.emptyList();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<VehiclesHour>> searchVehiclesHour(@RequestParam(value = "name", required = false) String name,
+                                                 @RequestParam(value = "brand", required = false) String brand,
+                                                 @RequestParam(value = "pricing", required = false) Double pricing,
+                                                 @RequestParam(value = "location", required = false) String location,
+                                                 @RequestParam(value = "engineType", required = false) String engineType){
+        List<VehiclesHour> vehiclesHourList = vehiclesHourService.searchProducts(name, brand, pricing ,location,engineType );
+
+        return ResponseEntity.ok().body(vehiclesHourList);
+    }
+
     @PostMapping("/hour")
     public ResponseEntity<String> updateVehiclesHourStatus(@RequestBody VehiclesHourDTO vehiclesHourDTO) {
         try{
@@ -57,4 +69,7 @@ public class VehiclesHourController {
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
 }

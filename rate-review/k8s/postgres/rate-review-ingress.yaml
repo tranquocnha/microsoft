@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rate-review-ingress
+  annotations:
+    #\kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: longmcs.com
+    http:
+      paths:
+      - path: /rate-review(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: rate-review
+            port:
+              number: 8081
+#      - path: /hello-world-two(/|$)(.*)
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: aks-helloworld-two
+#            port:
+#              number: 8080
+#      - path: /(.*)
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: rate-review
+#            port:
+#              number: 8080
