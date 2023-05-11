@@ -2,6 +2,7 @@ package com.microservices.ratereview.entity;
 
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,5 +45,17 @@ public class HistoryRateReviewEntity {
 
 	@Column(name = "DATE_LOG")
 	private Date dateLog;
+	
+	@Column(name = "PICKUP_TIME")
+    private LocalDate pickupTime;
+    
+	@Column(name = "DROPOFF_TIME")
+    private LocalDate dropoffTime;
+	
+	@Column(name = "LOCATION")
+    private String location;
+	
+	@Column(name = "PAYMENT_METHOD")
+    private String paymentMethod;
 
 }
