@@ -131,3 +131,9 @@
 2023-05-11 14:05:53,949 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\tools\wp\mcs\microsoft-BE\rate-review\src\test\resources
 2023-05-11 15:58:15,224 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
 2023-05-11 15:59:44,415 [Worker-4: Remove Repositories] WARN  org.eclipse.jgit.lib.Repository - close() called when useCnt is already zero for Repository[D:\tools\wp\mcs\.git]
+2023-05-11 16:02:08,990 [Worker-8: Importing Maven projects] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.microservices:rate-review:0.0.1-SNAPSHOT @ D:\tools\wp\mcs\microsoft-BE\rate-review\pom.xml.
+2023-05-11 16:02:13,738 [Worker-8: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /rate-review/src/main/java
+2023-05-11 16:02:13,739 [Worker-8: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /rate-review/src/main/resources
+2023-05-11 16:02:13,739 [Worker-8: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /rate-review/src/main/resources
+2023-05-11 16:02:13,740 [Worker-8: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /rate-review/src/test/java
+2023-05-11 16:02:14,056 [Worker-8: Importing Maven projects] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Imported and configured 1 project(s) in 8 sec
