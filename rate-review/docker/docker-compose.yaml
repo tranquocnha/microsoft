@@ -1,0 +1,57 @@
+version: '3.1'
+services:
+  app:
+    #    image: tranquocnha180800/docker-springboot-microsoft:v1
+    image: longtran020299/rate-review:0.0.1-SNAPSHOT
+    container_name: docker-springboot-microsoft
+#    build:
+#      context: ./docker
+#      dockerfile: docker-file
+    networks:
+      - spring-pgsql
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=myusername
+      - SPRING_DATASOURCE_PASSWORD=mypassword
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+  #    restart: on-failure
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: postgres
+    restart: always
+    networks:
+      - spring-pgsql
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_USER=myusername
+      - POSTGRES_DB=postgres
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    networks:
+      - spring-pgsql
+    ports:
+      - "5050:5050"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@email.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5050
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+networks:
+  spring-pgsql:
+    driver: bridge
+
+volumes:
+  local_pgdata:
+  pgadmin-data:
