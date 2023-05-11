@@ -20,6 +20,7 @@ import java.util.UUID;
 public class PaymentHistoryEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID paymentId;
     private UUID bookingId;

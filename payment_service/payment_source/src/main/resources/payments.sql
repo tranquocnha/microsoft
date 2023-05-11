@@ -1,0 +1,2 @@
+insert into payment.payments (id, user_id, amount, created_at, updated_at)
+values  ('d215b5f8-0249-4dc5-89a3-51fd148cfb41', 'd215b5f8-0249-4dc5-89a3-51fd148cfb21', 500.00, '2023-05-12 01:12:40.336000 +00:00', '2023-05-12 01:12:41.606000 +00:00');
