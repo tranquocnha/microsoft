@@ -49,6 +49,17 @@ public class VehiclesHourController {
         return Collections.emptyList();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<VehiclesHour>> searchVehiclesHour(@RequestParam(value = "name", required = false) String name,
+                                                 @RequestParam(value = "brand", required = false) String brand,
+                                                 @RequestParam(value = "pricing", required = false) Double pricing,
+                                                 @RequestParam(value = "location", required = false) String location,
+                                                 @RequestParam(value = "engineType", required = false) String engineType){
+        List<VehiclesHour> vehiclesHourList = vehiclesHourService.searchProducts(name, brand, pricing ,location,engineType );
+
+        return ResponseEntity.ok().body(vehiclesHourList);
+    }
+
     @PostMapping("/hour")
     public ResponseEntity<String> updateVehiclesHourStatus(@RequestBody VehiclesHourDTO vehiclesHourDTO) {
         try{
@@ -58,4 +69,7 @@ public class VehiclesHourController {
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
 }
