@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+D:\tools\wp\mcs\microsoft-BE\.metadata\.plugins\org.eclipse.jdt.core
-2304774561.index
-1865797976.index
