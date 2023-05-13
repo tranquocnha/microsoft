@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "TB_HISTORY_RATE_REVIEW")
+@Table(schema = "rate_review", name = "TB_HISTORY_RATE_REVIEW")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
