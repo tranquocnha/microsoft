@@ -17,8 +17,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=myusername
       - SPRING_DATASOURCE_PASSWORD=mypassword
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-  #    restart: on-failure
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#    restart: on-failure
   db:
     image: 'postgres:13.1-alpine'
     container_name: postgres
