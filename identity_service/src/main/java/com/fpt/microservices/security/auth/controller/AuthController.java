@@ -1,6 +1,7 @@
 package com.fpt.microservices.security.auth.controller;
 
 import com.fpt.microservices.security.auth.request.AuthenticationRequest;
+import com.fpt.microservices.security.auth.response.AuthenticationResponse;
 import com.fpt.microservices.security.auth.service.AuthService;
 import com.fpt.microservices.security.config.JwtUtils;
 import com.fpt.microservices.security.dao.JpaUserDetailsService;
@@ -35,7 +36,8 @@ public class AuthController {
   private final JwtUtils jwtUtils;
 
   @PostMapping("/login")
-  public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
+  public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
+    AuthenticationResponse res = new AuthenticationResponse();
     try {
       authenticationManager
       .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword(),
@@ -48,12 +50,17 @@ public class AuthController {
         cookie.setHttpOnly(true);
         cookie.setPath("/"); // Global
         response.addCookie(cookie);
-        return ResponseEntity.ok(jwt);
+        System.out.println(jwt);
+        res.setEmail(user.getUsername());
+        res.setToken(jwt);
+       // res.setRoles(user.getAuthorities());
+        return ResponseEntity.ok(res);
       }
-      return ResponseEntity.status(400).body("Error authenticating");
+      res.setMessage("Error authenticating");
+      return ResponseEntity.status(400).body(res);
     } catch (Exception e) {
-      e.printStackTrace();
-      return ResponseEntity.status(400).body("" + e.getMessage());
+      res.setMessage(e.getMessage());
+      return ResponseEntity.status(400).body(res);
     }
   }
 
