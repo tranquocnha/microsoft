@@ -66,4 +66,15 @@ public class VehiclesController {
         }
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Vehicles>> searchVehicles(@RequestParam(value = "name", required = false) String name,
+                                                         @RequestParam(value = "brand", required = false) String brand,
+                                                         @RequestParam(value = "pricing", required = false) Double pricing,
+                                                         @RequestParam(value = "location", required = false) String location,
+                                                         @RequestParam(value = "engineType", required = false) String engineType) {
+        List<Vehicles> vehiclesList = vehiclesService.searchProducts(name, brand, pricing, location, engineType);
+
+        return ResponseEntity.ok().body(vehiclesList);
+    }
+
 }

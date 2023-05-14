@@ -3,10 +3,14 @@ package com.fpt.g52.microsoft.service;
 import com.fpt.g52.microsoft.model.DTO.VehiclesAddDTO;
 import com.fpt.g52.microsoft.model.DTO.VehiclesDTO;
 import com.fpt.g52.microsoft.model.Vehicles;
+import com.fpt.g52.microsoft.model.VehiclesHour;
 import com.fpt.g52.microsoft.repository.VehiclesRepository;
 import com.fpt.g52.microsoft.util.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VehiclesServiceImpl implements VehiclesService {
@@ -33,6 +37,46 @@ public class VehiclesServiceImpl implements VehiclesService {
                     return "Update Done ";
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicles Id not found for this id :: " + vehiclesDTO.getVehicleId()));
+    }
+
+    @Override
+    public List<Vehicles> searchProducts(String name, String brand, Double pricing, String location, String engineType) {
+        List<Vehicles> allVehicles = vehiclesRepository.findAll();
+
+        // Lọc sản phẩm theo tên (nếu có)
+        if (name != null && !name.isEmpty()) {
+            allVehicles = allVehicles.stream()
+                    .filter(vehicle -> vehicle.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        // Lọc sản phẩm theo giá (nếu có)
+        if (pricing != null) {
+            allVehicles = allVehicles.stream()
+                    .filter(vehicle -> vehicle.getPricing() <= pricing)
+                    .collect(Collectors.toList());
+        }
+
+        // Lọc sản phẩm theo thể loại (nếu có)
+        if (brand != null && !brand.isEmpty()) {
+            allVehicles = allVehicles.stream()
+                    .filter(vehicle -> vehicle.getBrand().equalsIgnoreCase(brand))
+                    .collect(Collectors.toList());
+        }
+
+        if (location != null && !location.isEmpty()) {
+            allVehicles = allVehicles.stream()
+                    .filter(vehicle -> vehicle.getLocation().equalsIgnoreCase(location))
+                    .collect(Collectors.toList());
+        }
+
+        if (engineType != null && !engineType.isEmpty()) {
+            allVehicles = allVehicles.stream()
+                    .filter(vehicle -> vehicle.getEngineType().equalsIgnoreCase(engineType))
+                    .collect(Collectors.toList());
+        }
+
+        return allVehicles;
     }
 
     public void getSetVehicles(Vehicles vehicles, String brand, String name, String description, Double pricing, String location, Integer capacity, String color, String engineType, String image) {
