@@ -13,7 +13,7 @@ VALUES(6, 'VinFast ', 7, 'pink', 'This is a car of South Korea', 'Solar cars', '
 INSERT INTO  vehicles (vehicle_id, brand, capacity, color, description, engine_type, image, location, name, pricing)
 VALUES(7, 'SsangYong Motor', 45, 'black', 'This is a car of Seoul', 'Solar cars', 'https://news.oto-hui.com/wp-content/uploads/2020/04/SsangYong-Motor-b%E1%BB%8B-Mahindra-r%C3%BAt-v%E1%BB%91n-%C4%91%E1%BA%A7u-t%C6%B0-1.jpg', 'SsangYong', 'Sora', 367000000);
 INSERT INTO  vehicles (vehicle_id, brand, capacity, color, description, engine_type, image, location, name, pricing)
-VALUES(8, 'SsangYong Motor', 45, 'black', 'This is a car of Seoul', 'Solar cars', 'https://news.oto-hui.com/wp-content/uploads/2020/04/SsangYong-Motor-b%E1%BB%8B-Mahindra-r%C3%BAt-v%E1%BB%91n-%C4%91%E1%BA%A7u-t%C6%B0-1.jpg', 'SsangYong', 'Sora', 367000000);
+VALUES(8, 'Nissan  ', 7, 'pink', 'This is a car of Japan', 'Solar cars', 'https://imgd.aeplcdn.com/664x374/n/cw/ec/45795/magnite-exterior-right-front-three-quarter-9.jpeg?isig=0&q=75', 'Yokohama', 'Nissan ', 145000000);
 INSERT INTO  vehicles (vehicle_id, brand, capacity, color, description, engine_type, image, location, name, pricing)
 VALUES(9, 'Brabus', 7, 'blues', 'This is a car of Germany', 'Petrol engines', 'https://i2-vnexpress.vnecdn.net/2022/10/28/Brabus-G800-1.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=tZuVlkuudGnk-W_UuGNhSw', 'Bottrop', 'Brabus', 34500000);
 INSERT INTO  vehicles (vehicle_id, brand, capacity, color, description, engine_type, image, location, name, pricing)
