@@ -1,6 +1,7 @@
 package com.microservices.ratereview.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.microservices.ratereview.dto.HistoryRateReviewDTO;
 import com.microservices.ratereview.entity.HistoryRateReviewEntity;
+import com.microservices.ratereview.exception.ResourceNotFoundException;
 import com.microservices.ratereview.repository.RateReviewRepository;
 
 @Service
@@ -55,5 +57,14 @@ public class RateReviewService {
     public List<HistoryRateReviewDTO> getReviewVehicle(int idVehicle) {
         return rateReviewRepository.findByIdVehicle(idVehicle).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
                 .collect(Collectors.toList());
+    }
+    
+    // Create review 
+    public HistoryRateReviewEntity createReview(HistoryRateReviewDTO dto) {
+    	HistoryRateReviewEntity createReviewEntity = rateReviewRepository.findByIdLog(dto.getIdLog());
+    	createReviewEntity.setReviewContent(dto.getReviewContent());
+		createReviewEntity.setNumRate(dto.getNumRate());
+        
+        return rateReviewRepository.save(createReviewEntity);
     }
 }

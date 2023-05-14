@@ -3,8 +3,12 @@ package com.microservices.ratereview.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.microservices.ratereview.domain.InforBooKingDTO;
 import com.microservices.ratereview.domain.Services;
 import com.microservices.ratereview.dto.HistoryRateReviewDTO;
+import com.microservices.ratereview.entity.HistoryRateReviewEntity;
 import com.microservices.ratereview.rabbitmq.RabbitMqSender;
 import com.microservices.ratereview.service.RateReviewService;
 
 @RestController
 @RequestMapping(value = "rate-review")
+@CrossOrigin(origins="*")
 public class RateReviewController {
 
 //    private Logger logger = LoggerFactory.getLogger(RateReviewController.class);
@@ -57,5 +63,12 @@ public class RateReviewController {
     @GetMapping("/reviewvehicle")
     public List<HistoryRateReviewDTO> getReviewVehicle(@RequestParam int idVehicle) {
         return rateReviewService.getReviewVehicle(idVehicle);
+    }
+    
+    //Create review
+    @PutMapping("/createreview")
+    public HistoryRateReviewEntity createReivew(@RequestBody HistoryRateReviewDTO historyRateReviewDTO){
+    	System.out.println(historyRateReviewDTO);
+    	return rateReviewService.createReview(historyRateReviewDTO);
     }
 }
