@@ -20,33 +20,33 @@ public class RabbitMQConfig {
     @Value("${microservice_training.rabbitmq.queue}")
     String queueName;
 
-    @Value("${spring.rabbitmq.username}")
-    String username;
-
-    @Value("${spring.rabbitmq.password}")
-    private String password;
-
+//    @Value("${spring.rabbitmq.username}")
+//    String username;
+//
+//    @Value("${spring.rabbitmq.password}")
+//    private String password;
+//
     @Bean
     Queue queue() {
-        return new Queue(queueName, false);
+        return new Queue(queueName);
     }
-
-    @Value("${microservice_training.rabbitmq.exchange}")
-    String exchange;
-
-    @Value("${microservice_training.rabbitmq.routingkey}")
-    private String routingkey;
-
-    @Bean
-    DirectExchange exchange() {
-        return new DirectExchange(exchange);
-    }
-
-    @Bean
-    Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
-    }
-
+//
+//    @Value("${microservice_training.rabbitmq.exchange}")
+//    String exchange;
+//
+//    @Value("${microservice_training.rabbitmq.routingkey}")
+//    private String routingkey;
+//
+//    @Bean
+//    DirectExchange exchange() {
+//        return new DirectExchange(exchange);
+//    }
+//
+//    @Bean
+//    Binding binding(Queue queue, DirectExchange exchange) {
+//        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
+//    }
+//
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();

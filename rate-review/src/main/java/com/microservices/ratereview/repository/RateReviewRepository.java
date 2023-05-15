@@ -1,11 +1,11 @@
 package com.microservices.ratereview.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.microservices.ratereview.dto.HistoryRateReviewDTO;
 import com.microservices.ratereview.entity.HistoryRateReviewEntity;
 
 public interface RateReviewRepository extends JpaRepository<HistoryRateReviewEntity, Integer> {
@@ -16,4 +16,7 @@ public interface RateReviewRepository extends JpaRepository<HistoryRateReviewEnt
     public int avgRateNumVehicle(int idVehicle);
 
     public List<HistoryRateReviewEntity> findByIdVehicle(int idVehicle);
+    
+    public HistoryRateReviewEntity findByIdLog(int idLog);
+
 }

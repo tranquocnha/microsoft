@@ -1,9 +1,3 @@
-insert into TB_HISTORY_RATE_REVIEW
-(ID_USER
-,ID_VEHICLE
-,ID_BOOKING
-,NUM_RATE
-,REVIEW_CONTENT
-,FLAG_REVIEW
-,DATE_LOG)
-values (1,2,3,4,'5',6,'2023-04-29');
+INSERT INTO rate_review.tb_history_rate_review(
+	 date_log, dropoff_time, flag_review, id_booking, id_user, id_vehicle, location, num_rate, payment_method, pickup_time, review_content)
+	VALUES (now(), now(), 1, 10002, 10003, 10004, 'da nang', 5, 'ATM', now(), 'xe ngon');

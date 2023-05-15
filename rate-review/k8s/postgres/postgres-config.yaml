@@ -6,6 +6,6 @@ metadata:
     app: postgres
 data:
   POSTGRES_DB: postgres
-  POSTGRES_USER: myusername
-  POSTGRES_PASSWORD: mypassword
-  POSTGRES_URL: jdbc:postgresql://10.244.0.12:5432/postgres?createDatabaseIfNotExist=true
+  POSTGRES_USER: azure_admin@postgre-mcs
+  POSTGRES_PASSWORD: 12345678Long
+  POSTGRES_URL: jdbc:postgresql://postgre-mcs.postgres.database.azure.com:5432/postgres?createDatabaseIfNotExist=true

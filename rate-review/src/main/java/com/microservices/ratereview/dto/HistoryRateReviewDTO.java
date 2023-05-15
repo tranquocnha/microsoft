@@ -1,10 +1,9 @@
 package com.microservices.ratereview.dto;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class HistoryRateReviewDTO {
@@ -16,5 +15,9 @@ public class HistoryRateReviewDTO {
 	private String reviewContent;
 	private int flagReview;
 	private Date dateLog;
+    private LocalDate pickupTime;
+    private LocalDate dropoffTime;
+    private String location;
+    private String paymentMethod;
 
 }

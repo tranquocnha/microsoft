@@ -1,8 +1,13 @@
 package com.fpt.g52.microsoft.service;
 
 import com.fpt.g52.common_service.dto.vehicle.VehiclesHourDTO;
+import com.fpt.g52.microsoft.model.DTO.VehiclesHourAddDTO;
+import com.fpt.g52.microsoft.model.Hour;
+import com.fpt.g52.microsoft.model.Vehicles;
 import com.fpt.g52.microsoft.model.VehiclesHour;
+import com.fpt.g52.microsoft.repository.HourRepository;
 import com.fpt.g52.microsoft.repository.VehiclesHourRepository;
+import com.fpt.g52.microsoft.repository.VehiclesRepository;
 import com.fpt.g52.microsoft.util.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,10 @@ import java.util.stream.Collectors;
 public class VehiclesHourServiceImpl implements VehiclesHourService {
     @Autowired
     private VehiclesHourRepository vehiclesHourRepository;
+    @Autowired
+    private VehiclesRepository vehiclesRepository;
+    @Autowired
+    private HourRepository hourRepository;
 
     @Override
     public String updateStatusVehiclesHour(VehiclesHourDTO vehiclesHourDTO) throws ResourceNotFoundException {
@@ -64,5 +73,30 @@ public class VehiclesHourServiceImpl implements VehiclesHourService {
         }
 
         return allVehiclesHour;
+    }
+
+    @Override
+    public VehiclesHour addVehiclesHourService(VehiclesHourAddDTO vehiclesHourAddDTO) {
+        if (vehiclesHourAddDTO == null) {
+            throw new IllegalArgumentException("Null vehiclesHourAddDTO parameter");
+        }
+
+        VehiclesHour vehiclesHour = new VehiclesHour();
+        Vehicles vehicles = vehiclesRepository.findById(vehiclesHourAddDTO.getVehicleId()).orElse(null);
+        Hour hour = hourRepository.findById(vehiclesHourAddDTO.getHourId()).orElse(null);
+
+        if (hour == null) {
+            throw new IllegalArgumentException("Invalid hour ID: " + vehiclesHourAddDTO.getHourId());
+        }
+
+        if (vehicles == null) {
+            throw new IllegalArgumentException("Invalid vehicle ID: " + vehiclesHourAddDTO.getVehicleId());
+        }
+
+        vehiclesHour.setHour(hour);
+        vehiclesHour.setVehicle(vehicles);
+        vehiclesHour.setStatus(vehiclesHourAddDTO.getStatus());
+
+        return vehiclesHourRepository.save(vehiclesHour);
     }
 }
