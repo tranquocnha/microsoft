@@ -21,8 +21,8 @@ public class UsersServiceImpl implements UsersService {
 
   public Users addUser(UsersRequest user) {
     Users newUser = new Users();
-    newUser.setFirstName(user.getFirst_name());
-    newUser.setLastName(user.getLast_name());
+    newUser.setFirstName(user.getFirstName());
+    newUser.setLastName(user.getLastName());
     newUser.setEmail(user.getEmail());
     newUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
     newUser.setRoles(user.getRoles());

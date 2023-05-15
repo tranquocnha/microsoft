@@ -37,7 +37,7 @@ public class Users {
   private String email;
 
   @Column(name = "roles", nullable = false)
-  private String Roles;
+  private String roles;
 
   @Column(name = "password", nullable = false)
   private String password;

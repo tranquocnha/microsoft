@@ -32,6 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-*/rate-review/.settings/org.eclipse.jdt.apt.core.prefs
-*/rate-review/.project
-
+.settings/org.eclipse.jdt.apt.core.prefs
