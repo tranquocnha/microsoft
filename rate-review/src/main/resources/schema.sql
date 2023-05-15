@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS rate_review.tb_history_rate_review;
 
 CREATE TABLE IF NOT EXISTS rate_review.tb_history_rate_review
 (
-    id_log integer NOT NULL DEFAULT nextval('tb_history_rate_review_id_log_seq'::regclass),
+    id_log SERIAL NOT NULL,
     date_log date,
     dropoff_time date,
     flag_review integer,

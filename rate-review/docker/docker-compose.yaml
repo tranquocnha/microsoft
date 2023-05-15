@@ -40,11 +40,11 @@ services:
     networks:
       - spring-pgsql
     ports:
-      - "5050:5050"
+      - "82:82"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@email.com
       PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
+      PGADMIN_LISTEN_PORT: 82
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
