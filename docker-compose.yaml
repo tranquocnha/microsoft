@@ -20,6 +20,14 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     restart: on-failure
+  identity:
+    image: tranquocnha180800/identity-service:v1
+    container_name: identity-service
+#    build:
+#      context: .
+#      dockerfile: docker-file.yml
+    ports:
+      - "8081:8081"
   db:
     image: 'postgres:13-alpine'
     container_name: dbpostgres

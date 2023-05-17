@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  app:
+    image: identity-service
+    container_name: identity-service
+    build:
+      context: .
+      dockerfile: docker-file.yml
+    ports:
+      - "8081:8081"
