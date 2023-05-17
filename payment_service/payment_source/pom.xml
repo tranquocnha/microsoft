@@ -34,4 +34,31 @@
             <version>1.7.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+<!--                        <bindings>-->
+<!--                            <binding>${basedir}/bindings/github:/platform/bindings/ca-certificates</binding>-->
+<!--                        </bindings>-->
+                        <name>${project.groupId}/payment.service:${project.version}</name>
+<!--                        org.g52.training/payment.service
+                            org.g52.training/payment.service:1.0-SNAPSHOT-->
+                    </image>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build-image</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
