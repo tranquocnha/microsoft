@@ -1,10 +1,6 @@
 package g52.training.config;
 
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.MessageListenerContainer;
@@ -20,15 +16,15 @@ public class RabbitMQConfig {
     @Value("${microservice_training.rabbitmq.queue}")
     String queueName;
 
-//    @Value("${spring.rabbitmq.username}")
-//    String username;
-//
-//    @Value("${spring.rabbitmq.password}")
-//    private String password;
-//
     @Bean
     Queue queue() {
-        return new Queue(queueName);
+        return QueueBuilder.durable("Payment_Demo").withArgument("x-dead-letter-exchange", "payment-dlq-exchange")
+                .withArgument("x-dead-letter-routing-key", "deadLetter").build();
+    }
+
+    @Bean
+    Queue dlq() {
+        return QueueBuilder.durable("Payment_DLQ_DEMO").build();
     }
 
     @Value("${microservice_training.rabbitmq.exchange}")
@@ -40,6 +36,16 @@ public class RabbitMQConfig {
     @Bean
     DirectExchange exchange() {
         return new DirectExchange(exchange);
+    }
+
+    @Bean
+    DirectExchange deadLetterExchange() {
+        return new DirectExchange("payment-dlq-exchange");
+    }
+
+    @Bean
+    Binding DLQbinding() {
+        return BindingBuilder.bind(dlq()).to(deadLetterExchange()).with("deadLetter");
     }
 
     @Bean

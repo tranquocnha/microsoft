@@ -1,12 +1,10 @@
 package g52.training.service;
 
 import com.rabbitmq.client.Channel;
-import g52.training.entity.AccountEntity;
 import g52.training.entity.PaymentHistoryEntity;
-import g52.training.event.PaymentBookingEvent;
-import g52.training.repository.PaymentHistoryJpaRepository;
+import g52.training.event.CreateAccountPaymentSuccessEvent;
 import g52.training.repository.AccountJpaRepository;
-import g52.training.valueobject.PaymentStatus;
+import g52.training.repository.PaymentHistoryJpaRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.Optional;
+import java.util.Map;
 
 @Component
 public class RabbitMQConsumer {
@@ -27,9 +24,15 @@ public class RabbitMQConsumer {
     PaymentHistoryJpaRepository paymentHistoryJpaRepository;
 
     @RabbitListener(queues = "${microservice_training.rabbitmq.queue}")
-    public void recievedMessage(PaymentBookingEvent event, Channel channel,@Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
-        System.out.println("Recieved PaymentBookingEvent From RabbitMQ: " + event.getTraceId());
-
+    public void recievedMessage(CreateAccountPaymentSuccessEvent event,
+                                @Header(AmqpHeaders.CHANNEL) Channel channel,
+                                @Header(name = "x-death", required = false) Map<?, ?> death,
+//                                @Header(AmqpHeaders.MESSAGE_ID) String messageId,
+                                @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
+        System.out.println("Recieved PaymentBookingEvent From RabbitMQ: " + event.getRequestId() + " messageId " + tag);
+        if (null != death){
+            System.out.println("X RETRY " + death.get("count"));
+        }
         PaymentHistoryEntity paymentHistoryEntity = new PaymentHistoryEntity();
 //        Optional<AccountEntity> paymentEntityOptional = paymentJpaRepository.findByUserId(event.getUserId());
 //        if (paymentEntityOptional.isPresent()) {
@@ -51,6 +54,12 @@ public class RabbitMQConsumer {
 //        paymentHistoryJpaRepository.save(paymentHistoryEntity);
 //        paymentJpaRepository.save(paymentEntityOptional.get());
 
-        channel.basicAck(tag, false);
+        if (event.getUserName().equals("Toan")){
+            throw new RuntimeException();
+        } else {
+            channel.basicNack(tag, false, false);
+//            channel.basicAck(tag, false);
+ //           channel.basicReject(tag, false);
+        }
     }
 }
