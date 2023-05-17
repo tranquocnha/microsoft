@@ -12,6 +12,7 @@
     <artifactId>fpt-microservices</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>full-security</name>
+    <packaging>jar</packaging>
     <description>Spring Boot REST API with access and roles based security</description>
     <properties>
         <java.version>17</java.version>
@@ -94,6 +95,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                  <archive>
+                    <manifest>
+                        <!-- Jar file entry point -->
+                        <mainClass> com.fpt.microservices.security.FptMicroservicesApplication</mainClass>
+                    </manifest>
+                  </archive>
+                </configuration>
+            </plugin>
+            
         </plugins>
     </build>
 
