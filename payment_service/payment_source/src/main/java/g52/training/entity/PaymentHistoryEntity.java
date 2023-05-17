@@ -2,6 +2,7 @@ package g52.training.entity;
 
 
 import g52.training.valueobject.PaymentStatus;
+import g52.training.valueobject.PaymentsHistoryOperator;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,13 +23,16 @@ public class PaymentHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private UUID paymentId;
-    private UUID bookingId;
-    private UUID traceId;
-    private BigDecimal amount;
+    private Long accountId;
+    private String bookingId;
+    private String requestId;
+    private BigDecimal price;
     private ZonedDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+    @Enumerated(EnumType.STRING)
+    private PaymentsHistoryOperator operator;
+    private String message;
 
     @Override
     public boolean equals(Object o) {

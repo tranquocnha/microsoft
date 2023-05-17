@@ -2,7 +2,7 @@ package g52.training.controller;
 
 
 import g52.training.event.PaymentBookingEvent;
-import g52.training.repository.PaymentJpaRepository;
+import g52.training.repository.AccountJpaRepository;
 import g52.training.service.RabbitMQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @RestController
@@ -21,7 +20,7 @@ public class MoockController {
     RabbitMQSender rabbitMQSender;
 
     @Autowired
-    PaymentJpaRepository paymentJpaRepository;
+    AccountJpaRepository paymentJpaRepository;
 
     @GetMapping(value = "/publish-event/payment-booking")
     public String producer(@RequestParam("userId") String userId,

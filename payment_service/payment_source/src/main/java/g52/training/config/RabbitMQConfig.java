@@ -30,23 +30,23 @@ public class RabbitMQConfig {
     Queue queue() {
         return new Queue(queueName);
     }
-//
-//    @Value("${microservice_training.rabbitmq.exchange}")
-//    String exchange;
-//
-//    @Value("${microservice_training.rabbitmq.routingkey}")
-//    private String routingkey;
-//
-//    @Bean
-//    DirectExchange exchange() {
-//        return new DirectExchange(exchange);
-//    }
-//
-//    @Bean
-//    Binding binding(Queue queue, DirectExchange exchange) {
-//        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
-//    }
-//
+
+    @Value("${microservice_training.rabbitmq.exchange}")
+    String exchange;
+
+    @Value("${microservice_training.rabbitmq.routingkey}")
+    private String routingkey;
+
+    @Bean
+    DirectExchange exchange() {
+        return new DirectExchange(exchange);
+    }
+
+    @Bean
+    Binding binding(Queue queue, DirectExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
+    }
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
