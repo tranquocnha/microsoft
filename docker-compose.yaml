@@ -3,7 +3,6 @@ version: '3.1'
 services:
   app:
     image: tranquocnha180800/docker-springboot-microsoft:v12
-#    image: docker-springboot-microsoft:v12
     container_name: docker-springboot-microsoft
 #    build:
 #      context: ./vehicle_service/web
@@ -23,11 +22,13 @@ services:
   identity:
     image: tranquocnha180800/identity-service:v1
     container_name: identity-service
+    networks:
+      - spring-pgsql
 #    build:
 #      context: .
 #      dockerfile: docker-file.yml
     ports:
-      - "8081:8081"
+      - "8082:8080"
   db:
     image: 'postgres:13-alpine'
     container_name: dbpostgres
@@ -42,6 +43,56 @@ services:
       - POSTGRES_DB=microsoft
 #    volumes:
 #      - ./vehicle_service/db_init:/var/lib/postgresql/data
+  rate-review:
+    image: longtran020299/rate-review:0.0.1-SNAPSHOT
+    container_name: rate-review-microsoft
+    #    build:
+    #      context: ./docker
+    #      dockerfile: docker-file
+    networks:
+      - spring-pgsql
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://rate-review-db:5432/postgres?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=myusername
+      - SPRING_DATASOURCE_PASSWORD=mypassword
+
+  rate-review-db:
+    image: 'postgres:13.1-alpine'
+    container_name: postgres
+    restart: always
+    networks:
+      - spring-pgsql
+    ports:
+      - "54320:5432"
+    environment:
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_USER=myusername
+      - POSTGRES_DB=postgres
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    networks:
+      - spring-pgsql
+    ports:
+      - "82:82"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@email.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 82
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
 
 networks:
   spring-pgsql:
+    driver: bridge
+
+volumes:
+  local_pgdata:
+  pgadmin-data:
