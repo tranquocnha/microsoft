@@ -72,6 +72,19 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - local_pgdata:/var/lib/postgresql/data
+
+  # Modify by ToanTC3 - START
+  payment-service:
+    image: org.g52.training/payment.service:1.0-SNAPSHOT
+    container_name: payment-service
+    networks:
+      - spring-pgsql
+    ports:
+      - "8089:8089"
+    depends_on:
+      - db
+   # Modify by ToanTC3 - END
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4
