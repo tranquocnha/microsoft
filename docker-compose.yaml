@@ -52,7 +52,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - db
+      - rate-review-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://rate-review-db:5432/postgres?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=myusername
