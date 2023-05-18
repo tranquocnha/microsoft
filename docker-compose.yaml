@@ -75,7 +75,7 @@ services:
 
   # Modify by ToanTC3 - START
   payment-service:
-    image: org.g52.training/payment.service:1.0-SNAPSHOT
+    image: toantruong90/g52-train-payment-service:v1
     container_name: payment-service
     networks:
       - spring-pgsql
