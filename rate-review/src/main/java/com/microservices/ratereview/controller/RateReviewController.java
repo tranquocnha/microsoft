@@ -66,9 +66,9 @@ public class RateReviewController {
     }
     
     //Create review
-    @PutMapping("/createreview")
-    public HistoryRateReviewEntity createReivew(@RequestBody HistoryRateReviewDTO historyRateReviewDTO){
+    @PutMapping("/createreview/{idLog}")
+    public HistoryRateReviewEntity createReivew(@PathVariable int idLog ,@RequestBody HistoryRateReviewDTO historyRateReviewDTO){
     	System.out.println(historyRateReviewDTO);
-    	return rateReviewService.createReview(historyRateReviewDTO);
+    	return rateReviewService.createReview(idLog, historyRateReviewDTO);
     }
 }

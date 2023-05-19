@@ -60,8 +60,8 @@ public class RateReviewService {
     }
     
     // Create review 
-    public HistoryRateReviewEntity createReview(HistoryRateReviewDTO dto) {
-    	HistoryRateReviewEntity createReviewEntity = rateReviewRepository.findByIdLog(dto.getIdLog());
+    public HistoryRateReviewEntity createReview(int idLog, HistoryRateReviewDTO dto) {
+    	HistoryRateReviewEntity createReviewEntity = rateReviewRepository.findByIdLog(idLog);
     	createReviewEntity.setReviewContent(dto.getReviewContent());
 		createReviewEntity.setNumRate(dto.getNumRate());
         
