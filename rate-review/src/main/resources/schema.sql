@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS rate_review.tb_history_rate_review
     payment_method character varying(255) COLLATE pg_catalog."default",
     pickup_time date,
     review_content character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT tb_history_rate_review_pkey PRIMARY KEY (id_log)
+    CONSTRAINT tb_history_rate_review_pkey PRIMARY KEY (log_id)
 )
