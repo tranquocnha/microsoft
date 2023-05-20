@@ -19,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.fpt.g52.carsharing.booking.application.internal.commandservices.BookingCommandService;
+import com.fpt.g52.carsharing.booking.application.internal.outboundservices.acl.UserService;
 import com.fpt.g52.carsharing.booking.application.internal.outboundservices.acl.VehicleService;
 import com.fpt.g52.carsharing.booking.application.internal.queryservices.BookingQueryService;
 import com.fpt.g52.carsharing.booking.domain.exceptions.ResourceInvalidException;
 import com.fpt.g52.carsharing.booking.domain.model.aggregates.Booking;
 import com.fpt.g52.carsharing.booking.domain.model.commands.BookingCommand;
+import com.fpt.g52.carsharing.booking.domain.model.entities.User;
 import com.fpt.g52.carsharing.booking.domain.model.entities.Vehicle;
 import com.fpt.g52.carsharing.booking.interfaces.rest.dto.request.BookingRequest;
 import com.fpt.g52.carsharing.booking.interfaces.rest.dto.response.BookingResponse;
@@ -45,15 +46,19 @@ public class BookingController {
     
     private final VehicleService vehicleService;
     
+    private final UserService userService;
+    
 
     public BookingController(
             BookingCommandService commandService,
             BookingQueryService queryService,
-            VehicleService vehicleService
+            VehicleService vehicleService,
+            UserService userService
     ) {
         this.commandService = commandService;
         this.queryService = queryService;
         this.vehicleService = vehicleService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -64,9 +69,10 @@ public class BookingController {
         // get vehicle info
         Vehicle vehicle = vehicleService.getVehicleById(request.vehicleId());
         
-        String userLogin = "admin";
+        User userLogin = getUserInfo(null);
+
         BookingCommand command = BookingCommand.builder()
-                .userId(userLogin)
+                .userId(userLogin.getId())
                 .vehicleId(request.vehicleId())
                 .bookingFrom(request.from())
                 .bookingTo(request.to())
@@ -84,7 +90,9 @@ public class BookingController {
             @RequestParam("query") String query,
             Pageable pageable
     ) {
-        String userLogin = "admin";
+        // get user info from token
+        User userLogin = getUserInfo(null);
+
         Page<Booking> page = queryService.search(query, pageable);
         
         Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getUser().getId().equals(userLogin))
@@ -102,6 +110,7 @@ public class BookingController {
     public ResponseEntity<BookingResponse> findById(
             @PathVariable("id") String id
     ) {
+        getUserInfo(null);
         Booking booking = queryService.findById(id);
         return ResponseEntity.ok(new BookingResponse(booking));
     }
@@ -110,6 +119,7 @@ public class BookingController {
     public ResponseEntity<MessageResponse> receive(
             @PathVariable("id") String id
     ) {
+        getUserInfo(null);
         commandService.receive(id);
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
@@ -118,6 +128,7 @@ public class BookingController {
     public ResponseEntity<MessageResponse> complete(
             @PathVariable("id") String id
     ) {
+        getUserInfo(null);
         commandService.complete(id);
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
@@ -126,6 +137,7 @@ public class BookingController {
     public ResponseEntity<MessageResponse> payComplete(
             @PathVariable("id") String id
     ) {
+        getUserInfo(null);
         commandService.payComplete(id);
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
@@ -134,10 +146,10 @@ public class BookingController {
     public ResponseEntity<List<BookingResponse>> findByVehicleId(
             @PathVariable("id") String id,Pageable pageable
     ) {
-        String userLogin = "admin";
+        User userLogin = getUserInfo(null);
         Page<Booking> page = queryService.findByVehicleId(id, pageable);
         
-        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getUser().getId().equals(userLogin))
+        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getUser().getId().equals(userLogin.getId()))
                 .collect(Collectors.toList()), page.getPageable(), page.getTotalElements()).map(BookingResponse::new);
         
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
@@ -146,5 +158,15 @@ public class BookingController {
         headers.put("Total-Pages", List.of(String.valueOf(pageWithFilteredData.getTotalPages())));
 
         return new ResponseEntity<>(pageWithFilteredData.getContent(), headers, HttpStatus.OK);
+    }
+    
+    private User getUserInfo(String token) {
+        User userLogin = userService.getUserByid(null);
+        
+        if (userLogin == null) {
+            throw new ResourceInvalidException("session expired!");
+        }
+        
+        return userLogin;
     }
 }
