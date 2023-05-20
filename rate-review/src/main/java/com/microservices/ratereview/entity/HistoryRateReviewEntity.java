@@ -26,13 +26,13 @@ public class HistoryRateReviewEntity {
 	private int idLog;
 
 	@Column(name = "USER_ID")
-	private int idUser;
+	private String idUser;
 
 	@Column(name = "VEHICLE_ID")
-	private int idVehicle;
+	private String idVehicle;
 
 	@Column(name = "BOOKING_ID")
-	private int idBooking;
+	private String idBooking;
 
 	@Column(name = "NUM_RATE")
 	private int numRate;

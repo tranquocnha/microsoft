@@ -1,7 +1,6 @@
 package com.microservices.ratereview.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +12,9 @@ public interface RateReviewRepository extends JpaRepository<HistoryRateReviewEnt
     // Avg rate for vehicle
     @Query(value = "SELECT AVG(NUM_RATE) FROM TB_HISTORY_RATE_REVIEW WHERE ID_VEHICLE = ?1 AND FLAG_REVIEW = 2",
             nativeQuery = true)
-    public int avgRateNumVehicle(int idVehicle);
+    public int avgRateNumVehicle(String idVehicle);
 
-    public List<HistoryRateReviewEntity> findByIdVehicle(int idVehicle);
+    public List<HistoryRateReviewEntity> findByIdVehicle(String idVehicle);
     
     public HistoryRateReviewEntity findByIdLog(int idLog);
 

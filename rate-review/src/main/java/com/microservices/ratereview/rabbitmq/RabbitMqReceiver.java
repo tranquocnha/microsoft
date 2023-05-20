@@ -1,6 +1,5 @@
 package com.microservices.ratereview.rabbitmq;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -29,18 +28,27 @@ public class RabbitMqReceiver {
     private Services services;
     @Autowired
     private Auth auth;
+    
 
-    @RabbitListener(queues = "MQ_DEMO")
-    public void receivedMessage(@Payload String idBooking, Channel channel,
-            @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {// data input
+    @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
+    public void receivedMessage(@Payload RabbitDTO rbDto, Channel channel,
+            @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {// data input
         
         try {
-             System.out.println("idd: " + deliveryTag);
-            if (!auth.checkToken("")) {
-            	// add mss
+        	//String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGZwdC5jb20iLCJleHAiOjE2ODQ2MDI3ODEsImlhdCI6MTY4NDU2Njc4MSwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XX0.ZkTpYp-ysVOkxqlBUQ8PrnHRRa2-7AtXCljvdNcyw1U";
+            System.out.println("idd: " + deliveryTag);
+            if (rbDto == null) {
+            	System.out.println("rbDto is null");
+            	channel.basicAck(deliveryTag, false);
             	return;
             }
-            InforBooKingDTO info = services.getInforBooking(idBooking);
+            logger.info(String.format("Received JSON message -> %s", rbDto.toString()));
+            if (!"true".equals(auth.checkToken(rbDto.getToken()))) {
+            	System.out.println("Login fail");
+            	channel.basicAck(deliveryTag, false);
+            	return;
+            }
+            InforBooKingDTO info = services.getInforBooking(rbDto.getBookingId());
             HistoryRateReviewDTO dto = new HistoryRateReviewDTO();
             dto.setUserId(info.getUserId());
             dto.setBookingId(info.getBookingId());
@@ -56,6 +64,7 @@ public class RabbitMqReceiver {
         }
         catch(Exception e) {
             logger.error("Exception: " + e.getStackTrace());
+            return;
         }
         logger.info("Sussess");
     }
