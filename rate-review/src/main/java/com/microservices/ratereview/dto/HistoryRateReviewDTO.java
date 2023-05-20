@@ -7,10 +7,10 @@ import lombok.Data;
 
 @Data
 public class HistoryRateReviewDTO {
-	private int idLog;
-	private int idUser;
-	private int idVehicle;
-	private int idBooking;
+	private int logId;
+	private int userId;
+	private int vehicleId;
+	private int bookingId;
 	private int numRate;
 	private String reviewContent;
 	private int flagReview;

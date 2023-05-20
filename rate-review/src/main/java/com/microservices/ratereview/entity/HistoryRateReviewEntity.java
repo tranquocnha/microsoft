@@ -22,16 +22,16 @@ import lombok.NoArgsConstructor;
 public class HistoryRateReviewEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_log")
+	@Column(name = "LOG_ID")
 	private int idLog;
 
-	@Column(name = "ID_USER")
+	@Column(name = "USER_ID")
 	private int idUser;
 
-	@Column(name = "ID_VEHICLE")
+	@Column(name = "VEHICLE_ID")
 	private int idVehicle;
 
-	@Column(name = "ID_BOOKING")
+	@Column(name = "BOOKING_ID")
 	private int idBooking;
 
 	@Column(name = "NUM_RATE")

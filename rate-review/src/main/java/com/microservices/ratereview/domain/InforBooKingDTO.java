@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InforBooKingDTO {
-    private int idBooking;
+    private int bookingId;
     private LocalDate pickupTime;
     private LocalDate dropoffTime;
     private String location;
     private String paymentMethod;
-	private int idUser;
-	private int idVehicle;
+	private int userId;
+	private int vehicleId;
 }

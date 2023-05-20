@@ -1,6 +1,5 @@
 package com.microservices.ratereview.domain;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,19 +16,10 @@ public class Services {
 		 RestTemplate restTemplate = new RestTemplate();
 		 InforBooKingDTO inf = new InforBooKingDTO();
 		 try {
-			 
 			 Map<String, String> input = new HashMap<String, String>();
-			 input.put("idBooking", idBooking);
+			 input.put("bookingId", idBooking);
 			 String url = "xx";
-			 //restTemplate.getForObject(url, InforBooKingDTO.class);
-			 inf.setLocation("location 1");
-			 inf.setPaymentMethod("ATM");
-			 inf.setPickupTime(LocalDate.now());
-			 inf.setDropoffTime(LocalDate.now());
-			 inf.setIdUser(10001);
-			 inf.setIdBooking(10002);
-			 inf.setIdVehicle(10003);		 
-			 
+			 inf = restTemplate.getForObject(url, InforBooKingDTO.class);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("Exception: " + e.getStackTrace());
