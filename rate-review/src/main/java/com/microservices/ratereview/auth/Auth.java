@@ -24,7 +24,7 @@ public class Auth {
 
 			Map<String, String> input = new HashMap<String, String>();
 			input.put("token", token);
-			String uri = uriIdtt + "/api/v1/auth/validate-token?token={token}";
+			String uri = uriIdtt + "/api/v1/auth/v1/validate-token?token={token}";
 			ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class, input);
 			result = responseEntity.getBody();
 		} catch (Exception e) {

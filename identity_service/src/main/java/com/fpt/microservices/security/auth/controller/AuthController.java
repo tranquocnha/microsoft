@@ -71,8 +71,19 @@ public class AuthController {
     return ResponseEntity.ok(authService.addUser(user).map(UserSecurity::new).orElseThrow(() -> new Exception("Unknown")));
   }
 
-  @GetMapping("/validate-token")
+  @PostMapping("/validate-token")
   public ResponseEntity<Boolean> validateToken(@RequestParam("token") String token) {
+    try {
+      String email = jwtUtils.extractUsername(token);
+      final UserDetails user = jpaUserDetailsService.loadUserByUsername(email);
+      boolean isExpired = jwtUtils.validateToken(token, user);
+      return ResponseEntity.ok(isExpired);
+    } catch(Exception e) {
+      return ResponseEntity.status(400).body(false);
+    }
+  }
+  @GetMapping("/v1/validate-token")
+  public ResponseEntity<Boolean> validateTokenV1(@RequestParam("token") String token) {
     try {
       String email = jwtUtils.extractUsername(token);
       final UserDetails user = jpaUserDetailsService.loadUserByUsername(email);
