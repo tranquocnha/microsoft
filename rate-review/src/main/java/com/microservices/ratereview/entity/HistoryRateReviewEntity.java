@@ -24,38 +24,51 @@ public class HistoryRateReviewEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "LOG_ID")
 	private int idLog;
-
-	@Column(name = "USER_ID")
-	private String idUser;
-
-	@Column(name = "VEHICLE_ID")
-	private String idVehicle;
-
-	@Column(name = "BOOKING_ID")
-	private String idBooking;
-
+	
+	@Column(name = "FLAG_REVIEW")
+	private int flagReview;
+	
+	@Column(name = "DATE_REVIEW")
+	private Date dateReview;
+	
 	@Column(name = "NUM_RATE")
 	private int numRate;
 
 	@Column(name = "REVIEW_CONTENT")
 	private String reviewContent;
+	
+	// USER
+	@Column(name = "USER_ID")
+	private String idUser;
+	
+	@Column(name = "USER_NAME")
+	private String userName;
 
-	@Column(name = "FLAG_REVIEW")
-	private int flagReview;
+	// Vehicle
+	@Column(name = "VEHICLE_ID")
+	private String idVehicle;
+	
+	@Column(name = "VEHICLE_NAME")
+	private String vehicleName;
 
-	@Column(name = "DATE_LOG")
-	private Date dateLog;
+	// Booking
+	@Column(name = "BOOKING_ID")
+	private String idBooking;
 	
-	@Column(name = "PICKUP_TIME")
-    private LocalDate pickupTime;
-    
-	@Column(name = "DROPOFF_TIME")
-    private LocalDate dropoffTime;
+	@Column(name = "STATUS_BOOKING")
+	private String statusBooking;
 	
-	@Column(name = "LOCATION")
-    private String location;
+	@Column(name = "BOOKING_FROM")
+	private Long bookingFrom;
 	
-	@Column(name = "PAYMENT_METHOD")
-    private String paymentMethod;
+	@Column(name = "BOOKING_TO")
+	private  Long bookingTo;
+	
+	@Column(name = "BOOKING_PRICE")
+	private  Long bookingPrice;
+	
+	// Payment
+	@Column(name = "PAYMENT_STATUS")
+    private String paymentStatus;
 
 }

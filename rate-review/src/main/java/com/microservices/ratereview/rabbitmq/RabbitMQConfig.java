@@ -14,14 +14,21 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     @Value("${rabbitmq.queue.json.name}")
     private String jsonQueue;
-
+    @Value("${rabbitmq.queue.name}")
+    private String queue;
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
-
-    @Value("${rabbitmq.routing.json.key}")
-    private String routingJsonKey;
-    // spring bean for queue (store json messages)
+    @Value("${ratereview.complete.key}")
+    private String ratereviewComplete;
+    @Value("${ratereview.start.key}")
+    private String ratereviewStart;
     
+    // spring bean for rabbitmq queue
+    @Bean
+    public Queue queue(){
+        return new Queue(queue);
+    }
+    // spring bean for queue (store json messages)
     @Bean
     public Queue jsonQueue(){
         return new Queue(jsonQueue, true, false, false);
@@ -32,16 +39,23 @@ public class RabbitMQConfig {
     public TopicExchange exchange(){
         return new TopicExchange(exchange);
     }
-
+    // binding between queue and exchange using routing key
+    @Bean
+    public Binding binding(){
+        return BindingBuilder
+                .bind(queue())
+                .to(exchange())
+                .with(ratereviewComplete);
+    }
     // binding between json queue and exchange using routing key
     @Bean
     public Binding jsonBinding(){
         return BindingBuilder
                 .bind(jsonQueue())
                 .to(exchange())
-                .with(routingJsonKey);
+                .with(ratereviewStart);
     }
-
+    
     @Bean
     public MessageConverter converter(){
         return new Jackson2JsonMessageConverter();
