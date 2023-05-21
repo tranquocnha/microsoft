@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 
+import com.fpt.g52.carsharing.booking.application.internal.rabbitMQ.RabbitMQService;
 import com.fpt.g52.carsharing.booking.domain.exceptions.NotFoundException;
 import com.fpt.g52.carsharing.booking.domain.exceptions.ResourceInvalidException;
 import com.fpt.g52.carsharing.booking.domain.model.aggregates.Booking;
@@ -20,8 +21,11 @@ public class BookingCommandService {
 
     private final BookingRepository repository;
 
-    public BookingCommandService(BookingRepository repository) {
+    private final RabbitMQService<Booking> mqService;
+    
+    public BookingCommandService(BookingRepository repository, RabbitMQService<Booking> mqService) {
         this.repository = repository;
+        this.mqService = mqService;
     }
 
     public Booking book(BookingCommand command) throws Exception {
@@ -32,6 +36,8 @@ public class BookingCommandService {
     	}
     	
         Booking booking = new Booking(command);
+        mqService.sendtoPayment(booking);
+        mqService.sendtoReview(booking);
         return repository.save(booking);
     }
 

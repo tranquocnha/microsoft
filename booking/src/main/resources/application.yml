@@ -51,6 +51,7 @@ service:
   identity:
      local:
        domain: http://127.0.0.1:8082
+       url: /api/v1/auth
  
 
 
