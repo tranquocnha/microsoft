@@ -87,6 +87,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/microsoft?createDatabaseIfNotExist=true&currentSchema=payment&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+      - BOOKING_HOST=http://identity-service:8082
    # Modify by ToanTC3 - END
 
   pgadmin:
