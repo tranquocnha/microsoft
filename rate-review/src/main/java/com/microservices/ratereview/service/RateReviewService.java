@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.microservices.ratereview.dto.HistoryRateReviewDTO;
 import com.microservices.ratereview.entity.HistoryRateReviewEntity;
+import com.microservices.ratereview.exception.ResourceException;
 import com.microservices.ratereview.repository.RateReviewRepository;
 
 @Service
@@ -34,7 +35,7 @@ public class RateReviewService {
             HistoryRateReviewEntity entity = modelMapper.map(dto, HistoryRateReviewEntity.class);
             rateReviewRepository.save(entity);
         } catch (Exception e) {
-            logger.error("Exception: " + e.getStackTrace());
+        	throw new ResourceException("function createHistoryRateAndReview");
         }
         logger.info("Sussess");
     }
@@ -45,12 +46,21 @@ public class RateReviewService {
         try {
             count = rateReviewRepository.avgRateNumVehicle(idVehicle);
         } catch (Exception e) {
-            logger.error("Exception: " + e.getStackTrace());
+            throw new ResourceException("function avgRateNumVehicle");
         }
         logger.info("Sussess");
         return count;
     }
-
+    // Avg rate for vehicle
+    public int checkExistBooking(String idBooking) {
+        int count = 0;
+        try {
+            count = rateReviewRepository.countByIdBooking(idBooking);
+        } catch (Exception e) {
+        	throw new ResourceException("function checkExistBooking");
+        }
+        return count;
+    }
     // Get review by id Vehicle
     public List<HistoryRateReviewDTO> getReviewVehicle(String idVehicle) {
         return rateReviewRepository.findByIdVehicle(idVehicle).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
@@ -62,7 +72,12 @@ public class RateReviewService {
     	HistoryRateReviewEntity createReviewEntity = rateReviewRepository.findByIdLog(idLog);
     	createReviewEntity.setReviewContent(dto.getReviewContent());
 		createReviewEntity.setNumRate(dto.getNumRate());
-        
         return rateReviewRepository.save(createReviewEntity);
     }
+    public void updateStatusBooking(String idBooking) {
+    	HistoryRateReviewEntity createReviewEntity = rateReviewRepository.findByIdBooking(idBooking);
+    	createReviewEntity.setStatusBooking("COMPLETED");
+        rateReviewRepository.save(createReviewEntity);
+    }
+    
 }

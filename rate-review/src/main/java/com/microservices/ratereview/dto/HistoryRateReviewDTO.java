@@ -1,23 +1,30 @@
 package com.microservices.ratereview.dto;
 
+import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 
 import lombok.Data;
 
 @Data
 public class HistoryRateReviewDTO {
-	private int logId;
-	private String userId;
-	private String vehicleId;
-	private String bookingId;
+	private int flagReview;
+	private Date dateReview;
 	private int numRate;
 	private String reviewContent;
-	private int flagReview;
-	private Date dateLog;
-    private LocalDate pickupTime;
-    private LocalDate dropoffTime;
-    private String location;
-    private String paymentMethod;
-
+	// USER
+	private String idUser;
+	private String userName;
+	// Vehicle
+	private String idVehicle;
+	private String vehicleName;
+	// Booking
+	private String idBooking;
+	private String statusBooking;
+	private Long bookingFrom;
+	private Long bookingTo;
+	private BigDecimal bookingPrice;
+	// Payment
+    private String paymentStatus;
 }
+
+

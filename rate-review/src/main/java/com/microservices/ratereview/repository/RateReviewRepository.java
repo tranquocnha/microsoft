@@ -17,5 +17,7 @@ public interface RateReviewRepository extends JpaRepository<HistoryRateReviewEnt
     public List<HistoryRateReviewEntity> findByIdVehicle(String idVehicle);
     
     public HistoryRateReviewEntity findByIdLog(int idLog);
+    public HistoryRateReviewEntity findByIdBooking(String idBooking);
+    public int countByIdBooking(String idBooking);
 
 }

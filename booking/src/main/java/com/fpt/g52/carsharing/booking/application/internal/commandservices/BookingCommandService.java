@@ -1,12 +1,12 @@
 package com.fpt.g52.carsharing.booking.application.internal.commandservices;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 
+import com.fpt.g52.carsharing.booking.application.internal.outboundservices.acl.UserService;
 import com.fpt.g52.carsharing.booking.application.internal.rabbitMQ.RabbitMQService;
 import com.fpt.g52.carsharing.booking.domain.exceptions.NotFoundException;
 import com.fpt.g52.carsharing.booking.domain.exceptions.ResourceInvalidException;
@@ -20,11 +20,14 @@ import com.fpt.g52.carsharing.booking.domain.repositories.BookingRepository;
 public class BookingCommandService {
 
     private final BookingRepository repository;
+    
+    private final UserService userService;
 
     private final RabbitMQService<Booking> mqService;
     
-    public BookingCommandService(BookingRepository repository, RabbitMQService<Booking> mqService) {
+    public BookingCommandService(BookingRepository repository, UserService userService, RabbitMQService<Booking> mqService) {
         this.repository = repository;
+        this.userService = userService;
         this.mqService = mqService;
     }
 
@@ -94,8 +97,8 @@ public class BookingCommandService {
      * @param booking
      */
     private void checkValidBookingByUserId(Booking booking) {
-        String userLogin = "admin";// get from token
-        if(!userLogin.equals(booking.getUser().getId())) {
+        String userLogin = userService.getUserByid(null).getId();// get from token
+        if(!userLogin.equals(booking.getAccount().getId())) {
         	throw new ResourceInvalidException("BookingId invalid! ");
         }
     }

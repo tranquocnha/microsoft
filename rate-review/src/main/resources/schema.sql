@@ -1,22 +1,25 @@
-DROP SCHEMA IF EXISTS rate_review CASCADE;
+drop schema if exists rate_review cascade;
 
-CREATE SCHEMA rate_review;
+create schema rate_review;
 
-DROP TABLE IF EXISTS rate_review.tb_history_rate_review;
+drop table if exists rate_review.tb_history_rate_review;
 
-CREATE TABLE IF NOT EXISTS rate_review.tb_history_rate_review
+create table if not exists rate_review.tb_history_rate_review
 (
-    log_id SERIAL NOT NULL,
-    date_log date,
-    dropoff_time date,
+    log_id serial not null,
     flag_review integer,
-    booking_id character varying(255),
-    user_id character varying(255),
-    vehicle_id character varying(255),
-    location character varying(255),
+    date_review date,
     num_rate integer,
-    payment_method character varying(255),
-    pickup_time date,
     review_content character varying(255),
-    CONSTRAINT tb_history_rate_review_pkey PRIMARY KEY (log_id)
+    user_id character varying(255),
+    user_name character varying(255),
+    vehicle_id character varying(255),
+    vehicle_name character varying(255),
+    booking_id character varying(255),
+    status_booking character varying(255),
+    booking_from double precision,
+    booking_to double precision,
+    booking_price real,
+    payment_status character varying(255),
+    constraint tb_history_rate_review_pkey primary key (log_id)
 )
