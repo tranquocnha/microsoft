@@ -16,6 +16,6 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class DepositReqDto {
-    private String userId;
+    private String account;
     private BigDecimal price;
 }

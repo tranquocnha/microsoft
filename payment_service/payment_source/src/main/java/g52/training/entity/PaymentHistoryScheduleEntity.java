@@ -1,10 +1,11 @@
 package g52.training.entity;
 
 
+import g52.training.valueobject.PaymentStatus;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -13,23 +14,25 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "account")
+@Table(name = "payments_history_schedule")
 @Entity
-public class AccountEntity {
+public class PaymentHistoryScheduleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String account;
-    private BigDecimal amount;
+    private Long paymentsHistoryId;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+    @CreationTimestamp
     private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    private String message;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AccountEntity that = (AccountEntity) o;
+        PaymentHistoryScheduleEntity that = (PaymentHistoryScheduleEntity) o;
         return id.equals(that.id);
     }
 

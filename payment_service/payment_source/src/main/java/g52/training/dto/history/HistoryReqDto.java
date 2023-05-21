@@ -16,5 +16,5 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class HistoryReqDto {
-    private String userId;
+    private String account;
 }

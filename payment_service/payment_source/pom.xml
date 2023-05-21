@@ -33,6 +33,15 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -45,7 +54,8 @@
 <!--                        <bindings>-->
 <!--                            <binding>${basedir}/bindings/github:/platform/bindings/ca-certificates</binding>-->
 <!--                        </bindings>-->
-                        <name>${project.groupId}/payment.service:${project.version}</name>
+<!--                        <name>${project.groupId}/payment.service:${project.version}</name>-->
+                        <name>toantruong90/g52-train-payment-service:v1</name>
 <!--                        org.g52.training/payment.service
                             org.g52.training/payment.service:1.0-SNAPSHOT-->
                     </image>

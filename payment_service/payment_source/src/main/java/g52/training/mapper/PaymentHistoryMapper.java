@@ -4,6 +4,7 @@ import g52.training.dto.createpay.CreatePayReqDto;
 import g52.training.dto.createpay.CreatePayResponseDto;
 import g52.training.dto.history.History;
 import g52.training.entity.AccountEntity;
+import g52.training.entity.Payment;
 import g52.training.entity.PaymentHistoryEntity;
 import g52.training.valueobject.PaymentsHistoryOperator;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-@Component
-public class PaymentHistoryMapper {
+public final class PaymentHistoryMapper {
 
-    public PaymentHistoryEntity convertCreatePayResponseDto(CreatePayReqDto reqDto, CreatePayResponseDto responseDto, AccountEntity accountEntity, PaymentsHistoryOperator operator) {
+    public static PaymentHistoryEntity convertCreatePayResponseDto(CreatePayReqDto reqDto, CreatePayResponseDto responseDto, AccountEntity accountEntity, PaymentsHistoryOperator operator) {
         return PaymentHistoryEntity.builder()
-                .accountId(accountEntity.getId())
+                .account(accountEntity.getAccount())
                 .bookingId(reqDto.getBookingId())
                 .requestId(reqDto.getRequestId())
                 .price(reqDto.getPrice())
@@ -28,7 +28,20 @@ public class PaymentHistoryMapper {
                 .build();
     }
 
-    public History convertCreatePayResponseDto(PaymentHistoryEntity entity) {
+    public static PaymentHistoryEntity convertPayment(Payment payment) {
+        return PaymentHistoryEntity.builder()
+                .account(payment.getEmail())
+                .bookingId(payment.getRequestId())
+                .requestId(payment.getRequestId())
+                .price(payment.getPrice())
+                .status(payment.getStatus())
+                .operator(PaymentsHistoryOperator.PAY)
+                .retry(0L)
+                .message("")
+                .build();
+    }
+
+    public static History convertCreatePayResponseDto(PaymentHistoryEntity entity) {
         return new History(entity.getBookingId(), entity.getRequestId(), entity.getPrice(), entity.getStatus(), entity.getOperator(), entity.getMessage());
     }
 

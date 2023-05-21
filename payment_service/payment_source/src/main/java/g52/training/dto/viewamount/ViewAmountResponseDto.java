@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class ViewAmountResponseDto {
-    private String userId;
-    private String userName;
+    private String account;
     private BigDecimal amount;
 }

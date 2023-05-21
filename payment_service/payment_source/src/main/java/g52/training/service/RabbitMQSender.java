@@ -19,6 +19,9 @@ public class RabbitMQSender<T> implements MessageSender<T> {
     @Value("${microservice_training.rabbitmq.routingkey}")
     private String routingkey;
 
+
+
+
     @Override
     public void send(T t) {
         rabbitTemplateA.convertAndSend(exchange, routingkey, t);

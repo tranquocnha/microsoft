@@ -14,5 +14,5 @@ import lombok.*;
 @Setter
 @ToString
 public class ViewAmountReqDto {
-    private String userId;
+    private String account;
 }

@@ -16,9 +16,11 @@ import g52.training.repository.PaymentHistoryJpaRepository;
 import g52.training.valueobject.PaymentStatus;
 import g52.training.valueobject.PaymentsHistoryOperator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,10 +32,23 @@ public class PaymentServiceImp {
 
     private final PaymentHistoryJpaRepository paymentHistoryJpaRepository;
     private final AccountJpaRepository accountJpaRepository;
-    private final PaymentHistoryMapper paymentHistoryMapper;
+
+    public boolean registPayment(String userName) {
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(userName);
+        if (optionalAccountEntity.isEmpty()) {
+            AccountEntity accountEntity = new AccountEntity();
+            accountEntity.setAccount(userName);
+            accountEntity.setAmount(BigDecimal.ZERO);
+            accountEntity.setCreatedAt(ZonedDateTime.now());
+            accountEntity.setUpdatedAt(accountEntity.getCreatedAt());
+            accountJpaRepository.save(accountEntity);
+            return true;
+        }
+        return false;
+    }
 
     public CreatePayResponseDto makePayment(CreatePayReqDto createPayDto) {
-        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findByUserId(createPayDto.getUserId());
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(createPayDto.getAccount());
         CreatePayResponseDto responseDto = new CreatePayResponseDto();
         responseDto.setRequestId(createPayDto.getRequestId());
         responseDto.setPrice(createPayDto.getPrice());
@@ -52,14 +67,14 @@ public class PaymentServiceImp {
             optionalAccountEntity.get().setAmount(newAmount);
             accountJpaRepository.save(optionalAccountEntity.get());
         }
-        paymentHistoryJpaRepository.save(paymentHistoryMapper.convertCreatePayResponseDto(createPayDto, responseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.PAY));
+        paymentHistoryJpaRepository.save(PaymentHistoryMapper.convertCreatePayResponseDto(createPayDto, responseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.PAY));
 
         return responseDto;
     }
 
     public DepositResponseDto deposit(DepositReqDto reqDto) {
         DepositResponseDto responseDto = new DepositResponseDto();
-        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findByUserId(reqDto.getUserId());
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(reqDto.getAccount());
 
         CreatePayReqDto createPayReqDto = new CreatePayReqDto();
         createPayReqDto.setPrice(reqDto.getPrice());
@@ -80,11 +95,10 @@ public class PaymentServiceImp {
         BigDecimal newAmount = optionalAccountEntity.get().getAmount().add(reqDto.getPrice());
         optionalAccountEntity.get().setAmount(newAmount);
         accountJpaRepository.save(optionalAccountEntity.get());
-        paymentHistoryJpaRepository.save(paymentHistoryMapper.convertCreatePayResponseDto(createPayReqDto, payResponseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.PAY));
+        paymentHistoryJpaRepository.save(PaymentHistoryMapper.convertCreatePayResponseDto(createPayReqDto, payResponseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.PAY));
 
         ViewAmountResponseDto viewAmountResponseDto = new ViewAmountResponseDto();
-        viewAmountResponseDto.setUserId(optionalAccountEntity.get().getUserId());
-        viewAmountResponseDto.setUserName(optionalAccountEntity.get().getUserName());
+        viewAmountResponseDto.setAccount(optionalAccountEntity.get().getAccount());
         viewAmountResponseDto.setAmount(optionalAccountEntity.get().getAmount());
 
         responseDto.setViewAmount(viewAmountResponseDto);
@@ -92,26 +106,28 @@ public class PaymentServiceImp {
         return responseDto;
     }
 
-    public HistoryResponseDto getHistory(HistoryReqDto historyReqDto) {
-        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findByUserId(historyReqDto.getUserId());
+    public HistoryResponseDto getHistory(String account) {
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
         if (optionalAccountEntity.isEmpty()){
             throw new IllegalArgumentException("user_id is not exist or not created!");
         }
         List<History> list =
-                paymentHistoryJpaRepository.findAllByAccountId(optionalAccountEntity.get().getId()).stream().map(paymentHistoryMapper::convertCreatePayResponseDto).collect(Collectors.toList());
+                paymentHistoryJpaRepository.findAllByAccount(account).stream().map(PaymentHistoryMapper::convertCreatePayResponseDto).collect(Collectors.toList());
         HistoryResponseDto historyResponseDto = new HistoryResponseDto();
         historyResponseDto.setHistories(list);
+
+        ViewAmountResponseDto viewAmountResponseDto = viewAmount(account);
+        historyResponseDto.setViewAccount(viewAmountResponseDto);
         return historyResponseDto;
     }
 
-    public ViewAmountResponseDto viewAmount(ViewAmountReqDto viewAmountReqDto) {
+    public ViewAmountResponseDto viewAmount(String account) {
         ViewAmountResponseDto viewAmountResponseDto = new ViewAmountResponseDto();
-        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findByUserId(viewAmountReqDto.getUserId());
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
         if (optionalAccountEntity.isEmpty()){
             throw new IllegalArgumentException("user_id is not exist or not created!");
         }
-        viewAmountResponseDto.setUserId(optionalAccountEntity.get().getUserId());
-        viewAmountResponseDto.setUserName(optionalAccountEntity.get().getUserName());
+        viewAmountResponseDto.setAccount(optionalAccountEntity.get().getAccount());
         viewAmountResponseDto.setAmount(optionalAccountEntity.get().getAmount());
         return viewAmountResponseDto;
     }

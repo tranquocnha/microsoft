@@ -4,6 +4,8 @@ package g52.training.entity;
 import g52.training.valueobject.PaymentStatus;
 import g52.training.valueobject.PaymentsHistoryOperator;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,11 +25,15 @@ public class PaymentHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long accountId;
+    private String account;
     private String bookingId;
     private String requestId;
     private BigDecimal price;
+    private Long retry;
+    @CreationTimestamp
     private ZonedDateTime createdAt;
+    @UpdateTimestamp
+    private ZonedDateTime updatedAt;
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
     @Enumerated(EnumType.STRING)

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import g52.training.dto.viewamount.ViewAmountResponseDto;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -17,5 +18,6 @@ import java.util.List;
 @Setter
 @ToString
 public class HistoryResponseDto {
+    private ViewAmountResponseDto viewAccount;
     private List<History> histories;
 }
