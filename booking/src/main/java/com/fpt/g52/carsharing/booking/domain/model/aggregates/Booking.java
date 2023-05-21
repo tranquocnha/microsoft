@@ -37,7 +37,7 @@ public class Booking extends AbstractAggregateRoot<Booking> {
     private String id;
 
     @Embedded
-    private User user;
+    private User account;
 
     @Embedded
     private Vehicle vehicle;
@@ -62,7 +62,7 @@ public class Booking extends AbstractAggregateRoot<Booking> {
 
     public Booking(BookingCommand command) {
         id = NanoIdUtils.randomNanoId();
-        user = new User(command.getUserId(), command.getUserName());
+        account = new User(command.getUserId(), command.getUserName());
         vehicle = new Vehicle(command.getVehicleId(), command.getVehicleName(), command.getVehiclePrice());
         status = BookingStatus.BOOKED;
         duration = new BookingDuration(command.getBookingFrom(), command.getBookingTo());

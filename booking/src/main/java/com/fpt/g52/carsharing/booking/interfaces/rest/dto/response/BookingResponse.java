@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public record BookingResponse(
         String id,
 
-        UserResponse user,
+        UserResponse account,
 
         VehicleResponse vehicle,
 
@@ -31,7 +31,7 @@ public record BookingResponse(
     public BookingResponse(Booking booking) {
         this(
                 booking.getId(),
-                new UserResponse(booking.getUser()),
+                new UserResponse(booking.getAccount()),
                 new VehicleResponse(booking.getVehicle()),
                 booking.getStatus().toString(),
                 booking.getDuration().getFrom(),

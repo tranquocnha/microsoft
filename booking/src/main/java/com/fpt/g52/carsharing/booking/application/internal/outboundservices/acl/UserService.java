@@ -17,7 +17,7 @@ public class UserService {
             return null;
         }
 //        User user = new  RestTemplate().getForObject(env.getProperty("service.identity.local.domain")+ env.getProperty("service.identity.local.url") + token, User.class);
-        User user = new  User("admin", "admin");
+        User user = new  User("admin@fpt.com", "admin@fpt.com");
         return user;
     }
     

@@ -95,7 +95,7 @@ public class BookingCommandService {
      */
     private void checkValidBookingByUserId(Booking booking) {
         String userLogin = "admin";// get from token
-        if(!userLogin.equals(booking.getUser().getId())) {
+        if(!userLogin.equals(booking.getAccount().getId())) {
         	throw new ResourceInvalidException("BookingId invalid! ");
         }
     }

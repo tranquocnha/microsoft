@@ -95,7 +95,7 @@ public class BookingController {
 
         Page<Booking> page = queryService.search(query, pageable);
         
-        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getUser().getId().equals(userLogin))
+        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getAccount().getId().equals(userLogin.getId()))
                 .collect(Collectors.toList()), page.getPageable(), page.getTotalElements()).map(BookingResponse::new);
         
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
@@ -149,7 +149,7 @@ public class BookingController {
         User userLogin = getUserInfo(null);
         Page<Booking> page = queryService.findByVehicleId(id, pageable);
         
-        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getUser().getId().equals(userLogin.getId()))
+        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getAccount().getId().equals(userLogin.getId()))
                 .collect(Collectors.toList()), page.getPageable(), page.getTotalElements()).map(BookingResponse::new);
         
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
