@@ -72,6 +72,7 @@ public class RateReviewService {
     	HistoryRateReviewEntity createReviewEntity = rateReviewRepository.findByIdLog(idLog);
     	createReviewEntity.setReviewContent(dto.getReviewContent());
 		createReviewEntity.setNumRate(dto.getNumRate());
+		createReviewEntity.setFlagReview(dto.getFlagReview());
         return rateReviewRepository.save(createReviewEntity);
     }
     public void updateStatusBooking(String idBooking) {
