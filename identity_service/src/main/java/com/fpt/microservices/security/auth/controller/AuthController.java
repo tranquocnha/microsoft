@@ -93,4 +93,16 @@ public class AuthController {
       return ResponseEntity.status(400).body(false);
     }
   }
+  
+  @GetMapping("/v1/user")
+  public ResponseEntity<String> getUserId(@RequestParam("token") String token) {
+    try {
+      String email = jwtUtils.extractUsername(token);
+      final UserDetails user = jpaUserDetailsService.loadUserByUsername(email);
+      boolean isExpired = jwtUtils.validateToken(token, user);
+      return ResponseEntity.ok(isExpired ? user.getUsername() : null);
+    } catch(Exception e) {
+      return ResponseEntity.status(400).body(null);
+    }
+  }
 }

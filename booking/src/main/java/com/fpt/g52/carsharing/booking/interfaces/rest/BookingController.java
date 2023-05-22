@@ -1,6 +1,7 @@
 package com.fpt.g52.carsharing.booking.interfaces.rest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,13 +65,13 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<MessageResponse> book(
-            @RequestBody @Valid BookingRequest request
+            @RequestBody @Valid BookingRequest request, @RequestHeader(name = "token") String token
     ) throws Exception {
         
         // get vehicle info
         Vehicle vehicle = vehicleService.getVehicleById(request.vehicleId());
         
-        User userLogin = getUserInfo(null);
+        User userLogin = getUserInfo(token);
 
         BookingCommand command = BookingCommand.builder()
                 .userId(userLogin.getId())
@@ -88,10 +90,10 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingResponse>> search(
             @RequestParam("query") String query,
-            Pageable pageable
+            Pageable pageable, @RequestHeader(name = "token") String token
     ) {
         // get user info from token
-        User userLogin = getUserInfo(null);
+        User userLogin = getUserInfo(token);
 
         Page<Booking> page = queryService.search(query, pageable);
         
@@ -108,45 +110,45 @@ public class BookingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> findById(
-            @PathVariable("id") String id
+            @PathVariable("id") String id, @RequestHeader(name = "token") String token
     ) {
-        getUserInfo(null);
-        Booking booking = queryService.findById(id);
+        User userLogin = getUserInfo(token);
+        Booking booking = queryService.findById(id, userLogin.getId());
         return ResponseEntity.ok(new BookingResponse(booking));
     }
 
     @PutMapping("/{id}/receive")
     public ResponseEntity<MessageResponse> receive(
-            @PathVariable("id") String id
+            @PathVariable("id") String id, @RequestHeader(name = "token") String token
     ) {
-        getUserInfo(null);
-        commandService.receive(id);
+        User userLogin = getUserInfo(token);
+        commandService.receive(id, userLogin.getId());
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
 
     @PutMapping("/{id}/complete")
     public ResponseEntity<MessageResponse> complete(
-            @PathVariable("id") String id
+            @PathVariable("id") String id, @RequestHeader(name = "token") String token
     ) {
-        getUserInfo(null);
-        commandService.complete(id);
+        User userLogin = getUserInfo(token);
+        commandService.complete(id, userLogin.getId());
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
     
     @PutMapping("/{id}/paycomplete")
     public ResponseEntity<MessageResponse> payComplete(
-            @PathVariable("id") String id
+            @PathVariable("id") String id, @RequestHeader(name = "token") String token
     ) {
-        getUserInfo(null);
-        commandService.payComplete(id);
+        User userLogin = getUserInfo(token); 
+        commandService.payComplete(id, userLogin.getId());
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
     
     @GetMapping("/vehicle/{id}")
     public ResponseEntity<List<BookingResponse>> findByVehicleId(
-            @PathVariable("id") String id,Pageable pageable
+            @PathVariable("id") String id,Pageable pageable, @RequestHeader(name = "token") String token
     ) {
-        User userLogin = getUserInfo(null);
+        User userLogin = getUserInfo(token);
         Page<Booking> page = queryService.findByVehicleId(id, pageable);
         
         Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getAccount().getId().equals(userLogin.getId()))
@@ -159,9 +161,24 @@ public class BookingController {
 
         return new ResponseEntity<>(pageWithFilteredData.getContent(), headers, HttpStatus.OK);
     }
-    
+
+    @GetMapping("/none-pay/")
+    public ResponseEntity<List<BookingResponse>> findByPaymentStatusAndAccount(
+           Pageable pageable, @RequestHeader(name = "token") String token
+    ) {
+        User userLogin = getUserInfo(token);
+        Page<BookingResponse> pageWithFilteredData = queryService.findByPaymentStatusAndAccount(userLogin.getId(), pageable).map(BookingResponse::new);
+        
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.put("Size", List.of(String.valueOf(pageWithFilteredData.getSize())));
+        headers.put("Total-Elements", List.of(String.valueOf(pageWithFilteredData.getTotalElements())));
+        headers.put("Total-Pages", List.of(String.valueOf(pageWithFilteredData.getTotalPages())));
+
+        return new ResponseEntity<>(pageWithFilteredData.getContent(), headers, HttpStatus.OK);
+    }
+
     private User getUserInfo(String token) {
-        User userLogin = userService.getUserByid(null);
+        User userLogin = userService.getUserByid(token);
         
         if (userLogin == null) {
             throw new ResourceInvalidException("session expired!");

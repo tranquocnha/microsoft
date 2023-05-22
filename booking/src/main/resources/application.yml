@@ -36,9 +36,13 @@ rabbitmq:
     exchange: payment-exchange
     routingkey: payment-exchange
   rate-review:
-    queue : ratereview-mq
+    queue : ratereview-start
     exchange: ratereview-exchange
-    routingkey: ratereview_routing_key
+    routingkey: ratereview_start_key
+  rate-review-complete:
+    queue : ratereview-complete
+    exchange: ratereview-exchange
+    routingkey: ratereview_complete_key
 
 springdoc:
   api-docs:
@@ -51,7 +55,7 @@ service:
   identity:
      local:
        domain: http://127.0.0.1:8082
-       url: /api/v1/auth
+       url: /api/v1/auth/v1/user?token=
  
 
 

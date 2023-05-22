@@ -3,7 +3,11 @@ package com.fpt.g52.carsharing.booking.application.internal.outboundservices.acl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestTemplate;
 
+import com.fpt.g52.carsharing.booking.domain.exceptions.ResourceInvalidException;
 import com.fpt.g52.carsharing.booking.domain.model.entities.User;
 
 @Service
@@ -13,12 +17,17 @@ public class UserService {
     private Environment env;
     
     public User getUserByid(String token) {
-        if (!checkTokenExp(token)) {
+        String username;
+        try {
+            username = new  RestTemplate().getForObject(env.getProperty("service.identity.local.domain")+ env.getProperty("service.identity.local.url") + token, String.class);
+        } catch (RestClientException e) {
             return null;
         }
-//        User user = new  RestTemplate().getForObject(env.getProperty("service.identity.local.domain")+ env.getProperty("service.identity.local.url") + token, User.class);
-        User user = new  User("admin@fpt.com", "admin@fpt.com");
-        return user;
+        if (username == null) {
+            return null;
+        }
+        
+       return new  User(username, username);
     }
     
     private boolean checkTokenExp(String token) {

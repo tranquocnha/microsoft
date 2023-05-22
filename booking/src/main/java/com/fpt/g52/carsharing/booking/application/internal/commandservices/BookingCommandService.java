@@ -44,11 +44,11 @@ public class BookingCommandService {
         return repository.save(booking);
     }
 
-    public void receive(String id) {
+    public void receive(String id, String userId) {
     	
         Booking booking = repository.findById(id).orElseThrow(NotFoundException::new );
         
-        checkValidBookingByUserId(booking);
+        checkValidBookingByUserId(booking, userId);
         
         // check valid receive car
         if (!(booking.getStatus().name().equals(BookingStatus.BOOKED.name()) 
@@ -68,25 +68,26 @@ public class BookingCommandService {
         repository.save(booking);
     }
 
-    public void complete(String id) {
+    public void complete(String id, String userId) {
         Booking booking = repository.findById(id).orElseThrow(NotFoundException::new);
-        checkValidBookingByUserId(booking);
+        checkValidBookingByUserId(booking, userId);
         
         if (!booking.getStatus().name().equals(BookingStatus.RECEIVED.name())) {
         	throw new ResourceInvalidException("Could not give car back! Please check Booking status");
         }
         
         booking.complete();
+        mqService.sendtoReviewCmpt(booking);
         repository.save(booking);
     }
     
-    public void payComplete(String id) {
+    public void payComplete(String id, String userId) {
         Booking booking = repository.findById(id).orElseThrow(NotFoundException::new);
         
         if (!booking.getStatus().name().equals(BookingStatus.BOOKED.name())) {
         	throw new ResourceInvalidException("Could payment complete! Please check Booking status");
         }
-        checkValidBookingByUserId(booking);
+        checkValidBookingByUserId(booking, userId);
         booking.payComplete();
         repository.save(booking);
     }
@@ -96,10 +97,9 @@ public class BookingCommandService {
      * 
      * @param booking
      */
-    private void checkValidBookingByUserId(Booking booking) {
-        String userLogin = userService.getUserByid(null).getId();// get from token
-        if(!userLogin.equals(booking.getAccount().getId())) {
-        	throw new ResourceInvalidException("BookingId invalid! ");
+    private void checkValidBookingByUserId(Booking booking, String userId) {
+        if(!userId.equals(booking.getAccount().getId())) {
+        	throw new ResourceInvalidException("BookingId had not exists! ");
         }
     }
 }

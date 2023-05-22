@@ -42,5 +42,10 @@ public class BookingRepositoryImpl implements BookingRepository {
         long currentTime = System.currentTimeMillis();
         return repository.findByVehicleId(id, currentTime, pageable);
     }
+    
+    @Override
+    public Page<Booking> findByPaymentStatusAndAccount(String userId, Pageable pageable) {
+        return repository.findByPaymentStatusAndAccount(userId, pageable);
+    }
 
 }

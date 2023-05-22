@@ -39,4 +39,12 @@ public interface BookingJpaRepository extends JpaRepository<Booking, String> {
             + " order by b.time.time desc"
     )
     Page<Booking> findByVehicleId(String id, long curTime, Pageable pageable);
+    
+    @Query(
+            "select b from Booking b"
+            + " where b.account.id = :userId"
+            + " AND b.paymentStatus  = 'WAIT'"
+            + " order by b.time.time desc"
+    )
+    Page<Booking> findByPaymentStatusAndAccount(String userId, Pageable pageable);
 }

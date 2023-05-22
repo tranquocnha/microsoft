@@ -17,4 +17,6 @@ public interface BookingRepository {
     Optional<Booking> findByVehicleIdAndDuration(String id, Long from, Long to);
     
     Page<Booking> findByVehicleId(String id, Pageable pageable);
+    
+    Page<Booking> findByPaymentStatusAndAccount(String userId, Pageable pageable);
 }

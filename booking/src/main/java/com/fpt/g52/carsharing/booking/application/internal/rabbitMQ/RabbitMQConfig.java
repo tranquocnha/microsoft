@@ -35,6 +35,14 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.rate-review.routingkey}")
     private String reviewRoutingkey;
     
+    @Value("${rabbitmq.rate-review-complete.queue}")
+    String reviewCmptQueue;
+
+    @Value("${rabbitmq.rate-review-complete.exchange}")
+    String reviewCmptExchange;
+
+    @Value("${rabbitmq.rate-review-complete.routingkey}")
+    private String reviewCmptRoutingkey;
     
     @Bean
     Queue queuePayment() {
@@ -46,6 +54,11 @@ public class RabbitMQConfig {
     Queue reviewPayment() {
         return QueueBuilder.durable(reviewQueue).build();
     }
+    
+    @Bean
+    Queue reviewCmptPayment() {
+        return QueueBuilder.durable(reviewCmptQueue).build();
+    }
 
     @Bean
     DirectExchange paymentExchange() {
@@ -55,6 +68,11 @@ public class RabbitMQConfig {
     @Bean
     DirectExchange reviewExchange() {
         return new DirectExchange(reviewExchange);
+    }
+    
+    @Bean
+    DirectExchange reviewCmptExchange() {
+        return new DirectExchange(reviewCmptExchange);
     }
 
     
@@ -81,6 +99,11 @@ public class RabbitMQConfig {
     @Bean
     Binding reviewBinding() {
         return BindingBuilder.bind(reviewPayment()).to(reviewExchange()).with(reviewRoutingkey);
+    }
+    
+    @Bean
+    Binding reviewCmptBinding() {
+        return BindingBuilder.bind(reviewCmptPayment()).to(reviewCmptExchange()).with(reviewCmptRoutingkey);
     }
 
     @Bean

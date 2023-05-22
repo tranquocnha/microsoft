@@ -20,6 +20,12 @@ public class RabbitMQService<T> {
     @Value("${rabbitmq.rate-review.routingkey}")
     private String reviewRoutingkey;
     
+    @Value("${rabbitmq.rate-review-complete.exchange}")
+    String reviewCmptExchange;
+
+    @Value("${rabbitmq.rate-review-complete.routingkey}")
+    private String reviewCmptRoutingkey;
+    
     @Autowired
     private AmqpTemplate rabbitTemplate;
 
@@ -29,5 +35,9 @@ public class RabbitMQService<T> {
     
     public void sendtoReview(T t) {
         rabbitTemplate.convertAndSend(reviewExchange, reviewRoutingkey, t);
+    }
+    
+    public void sendtoReviewCmpt(T t) {
+        rabbitTemplate.convertAndSend(reviewCmptExchange, reviewCmptRoutingkey, t);
     }
 }
