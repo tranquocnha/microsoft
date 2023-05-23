@@ -18,6 +18,7 @@ import com.fpt.microservices.security.auth.service.AuthService;
 import com.fpt.microservices.security.config.JwtUtils;
 import com.fpt.microservices.security.dao.JpaUserDetailsService;
 import com.fpt.microservices.security.model.UserSecurity;
+import com.fpt.microservices.security.users.model.Users;
 import com.fpt.microservices.security.users.model.UsersRequest;
 
 import jakarta.annotation.PostConstruct;
@@ -82,6 +83,7 @@ public class AuthController {
       return ResponseEntity.status(400).body(false);
     }
   }
+  
   @GetMapping("/v1/validate-token")
   public ResponseEntity<Boolean> validateTokenV1(@RequestParam("token") String token) {
     try {
@@ -101,6 +103,23 @@ public class AuthController {
       final UserDetails user = jpaUserDetailsService.loadUserByUsername(email);
       boolean isExpired = jwtUtils.validateToken(token, user);
       return ResponseEntity.ok(isExpired ? user.getUsername() : null);
+    } catch(Exception e) {
+      return ResponseEntity.status(400).body(null);
+    }
+  }
+  
+  @GetMapping("/get-user-by-token")
+  public ResponseEntity<Object> getUserByToken(@RequestParam("token") String token) {
+    try {
+      String email = jwtUtils.extractUsername(token);
+      final UserDetails user = jpaUserDetailsService.loadUserByUsername(email);
+      boolean isExpired = jwtUtils.validateToken(token, user);
+      if(isExpired) {
+        Users userEntity = jpaUserDetailsService.getUserByEmail(email);
+        return ResponseEntity.ok(userEntity); 
+      } else {
+        return ResponseEntity.ok(false); 
+      }
     } catch(Exception e) {
       return ResponseEntity.status(400).body(null);
     }
