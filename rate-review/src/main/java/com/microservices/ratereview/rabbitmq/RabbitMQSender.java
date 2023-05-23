@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class RabbitMQSender {
 
-    @Value("${rabbitmq.exchange.name}")
+    @Value("${rabbitmq.queue.dlq.name}")
     private String exchange;
 
-    @Value("${ratereview.start.key}")
+    @Value("${ratereview.dlq.key}")
     private String routingJsonKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQSender.class);

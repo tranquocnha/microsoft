@@ -14,12 +14,22 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     @Value("${rabbitmq.queue.json.name}")
     private String jsonQueue;
+    
     @Value("${rabbitmq.queue.name}")
     private String queue;
+    
+    @Value("${rabbitmq.queue.dlq.name}")
+    private String dlQueue;
+    
+    @Value("${ratereview.dlq.key}")
+    private String ratereviewDql;
+    
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
+    
     @Value("${ratereview.complete.key}")
     private String ratereviewComplete;
+    
     @Value("${ratereview.start.key}")
     private String ratereviewStart;
     
@@ -27,6 +37,10 @@ public class RabbitMQConfig {
     @Bean
     public Queue queue(){
         return new Queue(queue);
+    }
+    @Bean
+    public Queue dlqQueue(){
+        return new Queue(dlQueue);
     }
     // spring bean for queue (store json messages)
     @Bean
@@ -54,6 +68,13 @@ public class RabbitMQConfig {
                 .bind(jsonQueue())
                 .to(exchange())
                 .with(ratereviewStart);
+    }
+    @Bean
+    public Binding dlqBinding(){
+        return BindingBuilder
+                .bind(jsonQueue())
+                .to(exchange())
+                .with(ratereviewDql);
     }
     
     @Bean

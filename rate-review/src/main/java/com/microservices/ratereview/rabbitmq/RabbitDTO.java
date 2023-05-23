@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RabbitDTO {
     private String id;
-	private User user;
+	private User account;
 	private Vehicle vehicle;
 	private String status;
 	private BookingDuration duration;

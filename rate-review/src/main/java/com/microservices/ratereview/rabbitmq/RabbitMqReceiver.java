@@ -1,8 +1,5 @@
 package com.microservices.ratereview.rabbitmq;
 
-import java.sql.Date;
-import java.time.LocalDate;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,9 +9,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.microservices.ratereview.auth.Auth;
-import com.microservices.ratereview.domain.InforBooKingDTO;
-import com.microservices.ratereview.domain.Services;
 import com.microservices.ratereview.dto.HistoryRateReviewDTO;
 import com.microservices.ratereview.exception.ResourceException;
 import com.microservices.ratereview.service.RateReviewService;
@@ -25,10 +19,12 @@ public class RabbitMqReceiver {
     private static final Logger logger = LoggerFactory.getLogger(RabbitMqReceiver.class);
     @Autowired
     RateReviewService rateReviewService;
+//    @Autowired
+//    private Services services;
+//    @Autowired
+//    private Auth auth;
     @Autowired
-    private Services services;
-    @Autowired
-    private Auth auth;
+    RabbitMQSender sender;
     
 
     @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
@@ -36,8 +32,10 @@ public class RabbitMqReceiver {
             @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {// data input
         
         try {
-            if (rbDto == null) {
-            	channel.basicAck(deliveryTag, false);
+            if (rbDto == null || rbDto.getAccount() == null ||
+            		rbDto.getVehicle() == null || rbDto.getDuration() == null) {
+            	//channel.basicAck(deliveryTag, false);
+            	sender.sendJsonMessage(rbDto);
             	throw new ResourceException("rbDto is null");
             }
             logger.info(String.format("Received INPUT -> %s", rbDto.toString()));
@@ -47,12 +45,12 @@ public class RabbitMqReceiver {
 //            	return;
 //            }
             HistoryRateReviewDTO dto = new HistoryRateReviewDTO();
-            dto.setFlagReview(0);
+            dto.setFlagReview(1);
             dto.setDateReview(null);
             dto.setNumRate(0);
             dto.setReviewContent(null);
-            dto.setIdUser(rbDto.getUser().getId());
-            dto.setUserName(rbDto.getUser().getName());
+            dto.setIdUser(rbDto.getAccount().getId());
+            dto.setUserName(rbDto.getAccount().getName());
             dto.setIdVehicle(rbDto.getVehicle().getId());
             dto.setVehicleName(rbDto.getVehicle().getName());
             dto.setIdBooking(rbDto.getId());
@@ -61,12 +59,13 @@ public class RabbitMqReceiver {
             dto.setBookingTo(rbDto.getDuration().getTo());
             dto.setBookingPrice(rbDto.getPrice().getPrice());
             dto.setPaymentStatus(rbDto.getPaymentStatus());
-            if(rateReviewService.checkExistBooking(rbDto.getUser().getId()) > 0) throw new ResourceException("Exist Booking ID: "+ rbDto.getUser().getId());
+            if(rateReviewService.checkExistBooking(rbDto.getAccount().getId()) > 0) throw new ResourceException("Exist Booking ID: "+ rbDto.getAccount().getId());
             rateReviewService.createHistoryRateAndReview(dto);
-            channel.basicAck(deliveryTag, false);
+            //channel.basicAck(deliveryTag, false);
         }
         catch(Exception e) {
             logger.error("Exception: " + e.getStackTrace());
+            sender.sendJsonMessage(rbDto);
             return;
         }
         logger.info("Sussess");
