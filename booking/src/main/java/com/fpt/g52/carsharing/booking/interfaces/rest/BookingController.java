@@ -158,12 +158,15 @@ public class BookingController {
         return new ResponseEntity<>(pageWithFilteredData.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/none-pay/")
-    public ResponseEntity<List<BookingResponse>> findByPaymentStatusAndAccount(
+    @GetMapping("/un-payment/")
+    public ResponseEntity<List<String>> findByPaymentStatusAndAccount(
            Pageable pageable, @RequestHeader(name = "token") String token
     ) {
         User userLogin = getUserInfo(token);
-        Page<BookingResponse> pageWithFilteredData = queryService.findByPaymentStatusAndAccount(userLogin.getId(), pageable).map(BookingResponse::new);
+        Page<Booking>  page = queryService.findByPaymentStatusAndAccount(userLogin.getId(), pageable); 
+        
+        Page<String> pageWithFilteredData = new PageImpl<String>(page.stream().map(Booking :: getId)
+                .collect(Collectors.toList()), page.getPageable(), page.getTotalElements());
         
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.put("Size", List.of(String.valueOf(pageWithFilteredData.getSize())));
