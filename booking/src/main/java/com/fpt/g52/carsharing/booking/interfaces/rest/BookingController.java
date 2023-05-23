@@ -146,13 +146,9 @@ public class BookingController {
     
     @GetMapping("/vehicle/{id}")
     public ResponseEntity<List<BookingResponse>> findByVehicleId(
-            @PathVariable("id") String id,Pageable pageable, @RequestHeader(name = "token") String token
+            @PathVariable("id") String id,Pageable pageable
     ) {
-        User userLogin = getUserInfo(token);
-        Page<Booking> page = queryService.findByVehicleId(id, pageable);
-        
-        Page<BookingResponse> pageWithFilteredData = new PageImpl<Booking>(page.stream().filter(item -> item.getAccount().getId().equals(userLogin.getId()))
-                .collect(Collectors.toList()), page.getPageable(), page.getTotalElements()).map(BookingResponse::new);
+        Page<BookingResponse> pageWithFilteredData = queryService.findByVehicleId(id, pageable).map(BookingResponse::new);
         
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.put("Size", List.of(String.valueOf(pageWithFilteredData.getSize())));
