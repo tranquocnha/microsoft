@@ -105,6 +105,39 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
+  pg_booking:
+    container_name: pg-booking-service
+    image: postgres:15.3-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=booking
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - booking_data:/var/lib/postgresql/data
+    networks:
+      - spring-pgsql
+  app_booking:
+    container_name: app-booking-service
+    image: tuannd1058/booking-service:v1
+    restart: on-failure
+    ports:
+      - 8088:8088
+    build: .
+    depends_on:
+      - pg_booking
+    environment:
+      - PORT=8088
+      - DB_HOST=pg_booking
+      - DB_PORT=5432
+      - DB_DATABASE=booking
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=admin
+    networks:
+      - spring-pgsql
+
 networks:
   spring-pgsql:
     driver: bridge
@@ -112,3 +145,4 @@ networks:
 volumes:
   local_pgdata:
   pgadmin-data:
+  booking_data:
