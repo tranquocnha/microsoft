@@ -42,7 +42,7 @@ public class VehiclesController {
             String messegeUpdate = vehiclesService.updateVehicles(vehiclesDTO);
             return new ResponseEntity<>(messegeUpdate, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
