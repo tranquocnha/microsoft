@@ -81,4 +81,10 @@ public class RateReviewService {
         rateReviewRepository.save(createReviewEntity);
     }
     
+    //Get review by id User
+    public List<HistoryRateReviewDTO> getReviewByUser(String idUser){
+    	return rateReviewRepository.findByIdUser(idUser).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
+                .collect(Collectors.toList());
+    }
+    
 }

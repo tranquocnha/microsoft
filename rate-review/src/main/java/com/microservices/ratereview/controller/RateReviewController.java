@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import com.microservices.ratereview.service.RateReviewService;
 
 @RestController
 @RequestMapping(value = "rate-review")
+@CrossOrigin(origins = "*")
 public class RateReviewController {
 
 //    private Logger logger = LoggerFactory.getLogger(RateReviewController.class);
@@ -59,8 +61,8 @@ public class RateReviewController {
     }
 
     // Get review by id Vehicle
-    @GetMapping("/reviewvehicle")
-    public List<HistoryRateReviewDTO> getReviewVehicle(@RequestParam String idVehicle) {
+    @GetMapping("/reviewvehicle/{idVehicle}")
+    public List<HistoryRateReviewDTO> getReviewVehicle(@PathVariable String idVehicle) {
         return rateReviewService.getReviewVehicle(idVehicle);
     }
     
@@ -68,5 +70,11 @@ public class RateReviewController {
     @PutMapping("/createreview/{idLog}")
     public HistoryRateReviewEntity createReivew(@PathVariable int idLog ,@RequestBody HistoryRateReviewDTO historyRateReviewDTO){
     	return rateReviewService.createReview(idLog, historyRateReviewDTO);
+    }
+    
+    //Get review by user
+    @GetMapping("/reviewuser/{idUser}")
+    public List<HistoryRateReviewDTO> getReviewByUser(@PathVariable String idUser) {
+        return rateReviewService.getReviewByUser(idUser);
     }
 }

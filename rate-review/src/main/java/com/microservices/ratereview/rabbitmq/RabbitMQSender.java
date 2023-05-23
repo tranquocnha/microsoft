@@ -11,7 +11,7 @@ public class RabbitMQSender {
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.routing.json.key}")
+    @Value("${ratereview.start.key}")
     private String routingJsonKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQSender.class);
