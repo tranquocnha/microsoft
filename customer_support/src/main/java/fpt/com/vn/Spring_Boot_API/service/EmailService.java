@@ -25,7 +25,7 @@ public class EmailService {
      * Email repository
      */
     @Autowired
-    private EmailRepository gmailRepository;
+    private EmailRepository emailRepository;
 
     /**
      * Lấy ra danh sách email của khách hàng.
@@ -33,7 +33,7 @@ public class EmailService {
      * @return danh sách email.
      */
     public List<EmailEntity> getGmails() {
-        return (List<EmailEntity>) gmailRepository.findAll();
+        return (List<EmailEntity>) emailRepository.findAll();
     }
 
     /**
@@ -82,5 +82,9 @@ public class EmailService {
             System.out.println("EmailService File Error"+ e);
         }
         return send;
+    }
+
+    public void saveEmail(EmailEntity emailEntity) {
+        emailRepository.save(emailEntity);
     }
 }

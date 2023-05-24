@@ -61,6 +61,7 @@ public class EmailController {
                 email.getSubject(), email.getMessage());
         System.out.println("result: " + result);
         if (result) {
+            emailService.saveEmail(ConvertUtils.comvertEmailToEmailEntity(email));
             return  ResponseEntity.ok("Email send successfully.");
         } else {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
