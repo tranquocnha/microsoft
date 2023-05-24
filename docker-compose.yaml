@@ -110,11 +110,12 @@ services:
     image: postgres:15.3-alpine
     restart: always
     ports:
-      - 5432:5432
+      - 5433:5433
     environment:
       - POSTGRES_DB=booking
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
+      - PGPORT=5433
     volumes:
       - booking_data:/var/lib/postgresql/data
     networks:
@@ -131,7 +132,7 @@ services:
     environment:
       - PORT=8088
       - DB_HOST=pg_booking
-      - DB_PORT=5432
+      - DB_PORT=5433
       - DB_DATABASE=booking
       - DB_USERNAME=postgres
       - DB_PASSWORD=admin
