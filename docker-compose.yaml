@@ -139,6 +139,22 @@ services:
     networks:
       - spring-pgsql
 
+  appCustomer:
+    image: tranquocnha180800/customer-support:v1
+    container_name: springboot-Customer
+    networks:
+      - spring-pgsql
+    ports:
+      - "8084:8084"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/microsoft?createDatabaseIfNotExist=true
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+    restart: on-failure
 networks:
   spring-pgsql:
     driver: bridge

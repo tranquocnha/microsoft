@@ -1,0 +1,6 @@
+version: "3"
+services:
+  backend_user:
+    build:
+      context: .
+    image: customer-support:v1

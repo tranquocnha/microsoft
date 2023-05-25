@@ -20,6 +20,7 @@ import java.util.List;
  * Email controller
  */
 @RequestMapping("/api")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class EmailController {
 
@@ -54,7 +55,6 @@ public class EmailController {
      * @param email: thông tin email
      * @return Thành công / thất bại
      */
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/send_email")
     public ResponseEntity<?> sendEmail(@RequestBody Email email) {
         boolean result = this.emailService.sendEmail(email.getFrom(),
