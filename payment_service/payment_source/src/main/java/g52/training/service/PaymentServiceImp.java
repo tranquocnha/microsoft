@@ -10,6 +10,7 @@ import g52.training.dto.history.HistoryResponseDto;
 import g52.training.dto.viewamount.ViewAmountReqDto;
 import g52.training.dto.viewamount.ViewAmountResponseDto;
 import g52.training.entity.AccountEntity;
+import g52.training.entity.PaymentHistoryEntity;
 import g52.training.mapper.PaymentHistoryMapper;
 import g52.training.repository.AccountJpaRepository;
 import g52.training.repository.PaymentHistoryJpaRepository;
@@ -72,9 +73,8 @@ public class PaymentServiceImp {
         return responseDto;
     }
 
-    public DepositResponseDto deposit(DepositReqDto reqDto) {
-        DepositResponseDto responseDto = new DepositResponseDto();
-        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(reqDto.getAccount());
+    public void deposit(String account, DepositReqDto reqDto) {
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
 
         CreatePayReqDto createPayReqDto = new CreatePayReqDto();
         createPayReqDto.setPrice(reqDto.getPrice());
@@ -82,9 +82,9 @@ public class PaymentServiceImp {
 
         CreatePayResponseDto payResponseDto = new CreatePayResponseDto();
         payResponseDto.setRequestId(createPayReqDto.getRequestId());
-        payResponseDto.setCreatedAt(createPayReqDto.getCreatedAt());
+        payResponseDto.setCreatedAt(ZonedDateTime.now().toEpochSecond());
         if (optionalAccountEntity.isEmpty()) {
-            throw new IllegalArgumentException("user_id is not exist or not created!");
+            throw new IllegalArgumentException("account is not exist or not created!");
         } else if (reqDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("price can not negative!");
         } else {
@@ -95,21 +95,13 @@ public class PaymentServiceImp {
         BigDecimal newAmount = optionalAccountEntity.get().getAmount().add(reqDto.getPrice());
         optionalAccountEntity.get().setAmount(newAmount);
         accountJpaRepository.save(optionalAccountEntity.get());
-        paymentHistoryJpaRepository.save(PaymentHistoryMapper.convertCreatePayResponseDto(createPayReqDto, payResponseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.PAY));
-
-        ViewAmountResponseDto viewAmountResponseDto = new ViewAmountResponseDto();
-        viewAmountResponseDto.setAccount(optionalAccountEntity.get().getAccount());
-        viewAmountResponseDto.setAmount(optionalAccountEntity.get().getAmount());
-
-        responseDto.setViewAmount(viewAmountResponseDto);
-        responseDto.setResponse(payResponseDto);
-        return responseDto;
+        paymentHistoryJpaRepository.save(PaymentHistoryMapper.convertCreatePayResponseDto(createPayReqDto, payResponseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.DEPOSIT));
     }
 
     public HistoryResponseDto getHistory(String account) {
         Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
         if (optionalAccountEntity.isEmpty()){
-            throw new IllegalArgumentException("user_id is not exist or not created!");
+            throw new IllegalArgumentException("account is not exist or not created!");
         }
         List<History> list =
                 paymentHistoryJpaRepository.findAllByAccount(account).stream().map(PaymentHistoryMapper::convertCreatePayResponseDto).collect(Collectors.toList());
@@ -125,7 +117,7 @@ public class PaymentServiceImp {
         ViewAmountResponseDto viewAmountResponseDto = new ViewAmountResponseDto();
         Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
         if (optionalAccountEntity.isEmpty()){
-            throw new IllegalArgumentException("user_id is not exist or not created!");
+            throw new IllegalArgumentException("account is not exist or not created!");
         }
         viewAmountResponseDto.setAccount(optionalAccountEntity.get().getAccount());
         viewAmountResponseDto.setAmount(optionalAccountEntity.get().getAmount());

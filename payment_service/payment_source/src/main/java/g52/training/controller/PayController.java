@@ -18,8 +18,9 @@ public class PayController {
     private final PaymentServiceImp paymentServiceImp;
 
     @PostMapping(value = "/deposit")
-    public ResponseEntity<DepositResponseDto> deposit(@RequestBody DepositReqDto depositReqDto) {
-        return ResponseEntity.ok(paymentServiceImp.deposit(depositReqDto));
+    public ResponseEntity<HistoryResponseDto> deposit(@RequestBody DepositReqDto depositReqDto) {
+        paymentServiceImp.deposit(SecurityContextHolder.getContext().getAuthentication().getName(), depositReqDto);
+        return ResponseEntity.ok(paymentServiceImp.getHistory(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @PostMapping(value = "/regist-payment")

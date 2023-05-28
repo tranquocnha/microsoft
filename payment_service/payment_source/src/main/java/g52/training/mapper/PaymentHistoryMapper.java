@@ -22,6 +22,7 @@ public final class PaymentHistoryMapper {
                 .requestId(reqDto.getRequestId())
                 .price(reqDto.getPrice())
                 .status(responseDto.getStatus())
+                .retry(0L)
                 .operator(operator)
                 .message(responseDto.getMessage())
                 .createdAt(ZonedDateTime.ofInstant(Instant.ofEpochMilli(responseDto.getCreatedAt()), ZoneId.systemDefault()))

@@ -45,7 +45,7 @@ public class ProcessPaymentServiceImp {
             sE.setPaymentsHistoryId(e.getId());
             if (optionalAccountEntity.isEmpty()) {
                 sE.setStatus(PaymentStatus.WAIT);
-                sE.setMessage("user_id is not exist or not created!");
+                sE.setMessage("account is not exist or not created!");
             } else if (optionalAccountEntity.get().getAmount().compareTo(e.getPrice()) < 1) {
                 sE.setStatus(PaymentStatus.WAIT);
                 sE.setMessage("Amount of user is not enough for payment please deposit!");
