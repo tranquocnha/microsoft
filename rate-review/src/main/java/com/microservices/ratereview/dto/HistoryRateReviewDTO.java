@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class HistoryRateReviewDTO {
+	private int idLog;
 	private int flagReview;
 	private Date dateReview;
 	private int numRate;
