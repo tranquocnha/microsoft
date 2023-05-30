@@ -12,7 +12,7 @@ CREATE TABLE "payment".account
 (
     id serial NOT NULL,
     account VARCHAR(100) NOT NULL,
-    amount numeric(10,2) NOT NULL,
+    amount numeric(22,2) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     CONSTRAINT payments_pkey PRIMARY KEY (id)
@@ -25,7 +25,7 @@ CREATE TABLE "payment".payments_history
     account VARCHAR(100) NOT NULL,
     booking_id VARCHAR(100) NULL,
     request_id VARCHAR(100) NOT NULL,
-    price numeric(10,2) NOT NULL,
+    price numeric(22,2) NOT NULL,
     status payment_status NOT NULL,
     retry INTEGER NOT NULL,
     operator payments_history_operator NOT NULL,

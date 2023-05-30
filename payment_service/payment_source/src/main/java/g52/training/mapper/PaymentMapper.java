@@ -10,7 +10,7 @@ public final class PaymentMapper {
     }
 
     public static Payment convertBookingPublishedToPayment(BookingPublishedModel published) {
-        return new Payment(published.getAccount().getId(), published.getPrice().getPrice(), published.getId(), published.getPaymentStatus());
+        return new Payment(published.getAccount() == null ? null : published.getAccount().getId(),published.getPrice() == null ? null :  published.getPrice().getPrice(), published.getId(), published.getPaymentStatus());
     }
 
     public static History convertCreatePayResponseDto(PaymentHistoryEntity entity) {

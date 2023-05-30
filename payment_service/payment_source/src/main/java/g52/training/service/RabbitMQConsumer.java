@@ -29,6 +29,7 @@ public class RabbitMQConsumer {
 //                                @Header(name = "x-death", required = false) Map<?, ?> death,
 //                                @Header(AmqpHeaders.MESSAGE_ID) String messageId,
                                 @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
+//        System.out.println("MessageID = " + model.getId());
         Payment payment = PaymentMapper.convertBookingPublishedToPayment(model);
         if (payment.isInitPaymentStatus()){
             paymentHistoryJpaRepository.save(PaymentHistoryMapper.convertPayment(payment));

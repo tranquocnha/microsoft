@@ -1,15 +1,12 @@
 package g52.training.service;
 
-import g52.training.dto.createpay.CreatePayResponseDto;
 import g52.training.entity.AccountEntity;
 import g52.training.entity.PaymentHistoryEntity;
 import g52.training.entity.PaymentHistoryScheduleEntity;
-import g52.training.mapper.PaymentHistoryMapper;
 import g52.training.repository.AccountJpaRepository;
 import g52.training.repository.PaymentHistoryJpaRepository;
 import g52.training.repository.PaymentHistoryScheduleJpaRepository;
 import g52.training.valueobject.PaymentStatus;
-import g52.training.valueobject.PaymentsHistoryOperator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -68,7 +65,10 @@ public class ProcessPaymentServiceImp {
 
             paymentHistoryJpaRepository.save(e);
             paymentHistoryScheduleJpaRepository.save(sE);
-            requestIdNotify.add(e.getBookingId());
+
+            if (!PaymentStatus.WAIT.equals(sE.getStatus())) {
+                requestIdNotify.add(e.getBookingId());
+            }
         }
 //
 //        RestTemplate restTemplate2 = new RestTemplate();
