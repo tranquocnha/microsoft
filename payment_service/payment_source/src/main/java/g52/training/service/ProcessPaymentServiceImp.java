@@ -9,8 +9,6 @@ import g52.training.repository.PaymentHistoryScheduleJpaRepository;
 import g52.training.valueobject.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -80,11 +78,11 @@ public class ProcessPaymentServiceImp {
 
         for (String str: requestIdNotify) {
             String bookingNotify = bookingHost + NOTIFY_PAID_API.replace("{id}", str);
-            System.out.println("Send notice to bookingNotify");
+            System.out.println("Send notice to bookingNotify " + bookingNotify);
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.exchange(bookingNotify, HttpMethod.PUT, null, String.class);
-            System.out.println(response);
+            restTemplate.put(bookingNotify, null);
             System.out.println("End send notice to bookingNotify");
         }
+
     }
 }
