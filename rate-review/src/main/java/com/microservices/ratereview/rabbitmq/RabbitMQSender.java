@@ -20,6 +20,9 @@ public class RabbitMQSender {
     @Value("${ratereview.complete.key}")
     private String routingKey;
     
+    @Value("${ratereview.start.key}")
+    private String startroutingKey;
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQSender.class);
 
     private RabbitTemplate rabbitTemplate;
@@ -30,7 +33,7 @@ public class RabbitMQSender {
 
     public void sendJsonMessage(RabbitDTO user){
         LOGGER.info(String.format("Json message sent -> %s", user.toString()));
-        rabbitTemplate.convertAndSend(exchange, routingJsonKey, user);
+        rabbitTemplate.convertAndSend(exchange1, startroutingKey, user);
     }
     public void sendMessage(Object str){
         LOGGER.info(String.format("Message sent -> %s", str));
