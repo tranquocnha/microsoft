@@ -8,12 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class RabbitMQSender {
 
-    @Value("${rabbitmq.queue.dlq.name}")
+    @Value("${rabbitmq.exchange.dlq.name}")
     private String exchange;
 
     @Value("${ratereview.dlq.key}")
     private String routingJsonKey;
 
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange1;
+
+    @Value("${ratereview.complete.key}")
+    private String routingKey;
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQSender.class);
 
     private RabbitTemplate rabbitTemplate;
@@ -25,5 +31,13 @@ public class RabbitMQSender {
     public void sendJsonMessage(RabbitDTO user){
         LOGGER.info(String.format("Json message sent -> %s", user.toString()));
         rabbitTemplate.convertAndSend(exchange, routingJsonKey, user);
+    }
+    public void sendMessage(Object str){
+        LOGGER.info(String.format("Message sent -> %s", str));
+        rabbitTemplate.convertAndSend(exchange, routingJsonKey, str);
+    }
+    public void sendJsonMessage1(String str){
+        LOGGER.info(String.format("Message sent -> %s", str));
+        rabbitTemplate.convertAndSend(exchange1, routingKey, str);
     }
 }

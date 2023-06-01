@@ -35,7 +35,7 @@ public class RateReviewService {
             HistoryRateReviewEntity entity = modelMapper.map(dto, HistoryRateReviewEntity.class);
             rateReviewRepository.save(entity);
         } catch (Exception e) {
-        	throw new ResourceException("function createHistoryRateAndReview");
+        	logger.error("Exception:" + e); 
         }
         logger.info("Sussess");
     }
@@ -46,7 +46,7 @@ public class RateReviewService {
         try {
             count = rateReviewRepository.avgRateNumVehicle(idVehicle);
         } catch (Exception e) {
-            throw new ResourceException("function avgRateNumVehicle");
+        	logger.error("Exception:" + e); 
         }
         logger.info("Sussess");
         return count;
@@ -57,7 +57,7 @@ public class RateReviewService {
         try {
             count = rateReviewRepository.countByIdBooking(idBooking);
         } catch (Exception e) {
-        	throw new ResourceException("function checkExistBooking");
+        	logger.error("Exception:" + e); 
         }
         return count;
     }

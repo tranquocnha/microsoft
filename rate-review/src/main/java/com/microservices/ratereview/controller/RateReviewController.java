@@ -53,7 +53,12 @@ public class RateReviewController {
         rabbitMqSender.sendJsonMessage(message);
         return ResponseEntity.ok("Json message sent to RabbitMQ ...");
     }
-
+    // Test rabbit
+    @PostMapping(value = "/testmq1")
+    public ResponseEntity<String> publishUserDetails(@RequestBody String message) {
+        rabbitMqSender.sendJsonMessage1(message);
+        return ResponseEntity.ok("Json message sent to RabbitMQ ...");
+    }
     // Avg rate for vehicle
     @GetMapping("/ratenumvehicle")
     public int getRateMumVehicle(@RequestParam String idVehicle) {

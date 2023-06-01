@@ -12,24 +12,24 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${rabbitmq.queue.json.name}")
-    private String jsonQueue;
-    
-    @Value("${rabbitmq.queue.name}")
-    private String queue;
-    
+	
+    @Value("${rabbitmq.exchange.dlq.name}")
+    private String exchangedlq;
     @Value("${rabbitmq.queue.dlq.name}")
     private String dlQueue;
-    
     @Value("${ratereview.dlq.key}")
     private String ratereviewDql;
     
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
     
+    @Value("${rabbitmq.queue.json.name}")
+    private String jsonQueue;
+    @Value("${rabbitmq.queue.name}")
+    private String queue;
+
     @Value("${ratereview.complete.key}")
     private String ratereviewComplete;
-    
     @Value("${ratereview.start.key}")
     private String ratereviewStart;
     
@@ -45,13 +45,18 @@ public class RabbitMQConfig {
     // spring bean for queue (store json messages)
     @Bean
     public Queue jsonQueue(){
-        return new Queue(jsonQueue, true, false, false);
+        return new Queue(jsonQueue);
     }
 
     // spring bean for rabbitmq exchange
     @Bean
     public TopicExchange exchange(){
         return new TopicExchange(exchange);
+    }
+    // spring bean for rabbitmq exchange
+    @Bean
+    public TopicExchange exchangedlq(){
+        return new TopicExchange(exchangedlq);
     }
     // binding between queue and exchange using routing key
     @Bean
@@ -72,8 +77,8 @@ public class RabbitMQConfig {
     @Bean
     public Binding dlqBinding(){
         return BindingBuilder
-                .bind(jsonQueue())
-                .to(exchange())
+                .bind(dlqQueue())
+                .to(exchangedlq())
                 .with(ratereviewDql);
     }
     
