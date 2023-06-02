@@ -81,13 +81,13 @@ public class BookingCommandService {
         repository.save(booking);
     }
     
-    public void payComplete(String id, String userId) {
+    public void payComplete(String id) {
         Booking booking = repository.findById(id).orElseThrow(NotFoundException::new);
         
         if (!booking.getStatus().name().equals(BookingStatus.BOOKED.name())) {
         	throw new ResourceInvalidException("Could payment complete! Please check Booking status");
         }
-        checkValidBookingByUserId(booking, userId);
+        //checkValidBookingByUserId(booking, userId);
         booking.payComplete();
         repository.save(booking);
     }

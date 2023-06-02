@@ -137,10 +137,10 @@ public class BookingController {
     
     @PutMapping("/{id}/paycomplete")
     public ResponseEntity<MessageResponse> payComplete(
-            @PathVariable("id") String id, @RequestHeader(name = "token") String token
+            @PathVariable("id") String id
     ) {
-        User userLogin = getUserInfo(token); 
-        commandService.payComplete(id, userLogin.getId());
+       // User userLogin = getUserInfo(token); 
+        commandService.payComplete(id);
         return ResponseEntity.ok(new MessageResponse("success!"));
     }
     
