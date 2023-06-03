@@ -14,11 +14,14 @@ import g52.training.entity.PaymentHistoryEntity;
 import g52.training.mapper.PaymentHistoryMapper;
 import g52.training.repository.AccountJpaRepository;
 import g52.training.repository.PaymentHistoryJpaRepository;
+import g52.training.repository.PaymentHistoryScheduleJpaRepository;
 import g52.training.valueobject.PaymentStatus;
 import g52.training.valueobject.PaymentsHistoryOperator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -34,6 +37,10 @@ public class PaymentServiceImp {
     private final PaymentHistoryJpaRepository paymentHistoryJpaRepository;
     private final AccountJpaRepository accountJpaRepository;
 
+    @Value("${booking.host}")
+    private String bookingHost;
+    private final String NOTIFY_PAID_API = "/api/bookings/{id}/paycomplete";
+
     public boolean registPayment(String userName) {
         Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(userName);
         if (optionalAccountEntity.isEmpty()) {
@@ -48,17 +55,17 @@ public class PaymentServiceImp {
         return false;
     }
 
-    public CreatePayResponseDto makePayment(CreatePayReqDto createPayDto) {
-        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(createPayDto.getAccount());
+    public CreatePayResponseDto makePayment(final String account, CreatePayReqDto createPayDto) {
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
         CreatePayResponseDto responseDto = new CreatePayResponseDto();
-        responseDto.setRequestId(createPayDto.getRequestId());
+        responseDto.setBookingId(createPayDto.getBookingId());
         responseDto.setPrice(createPayDto.getPrice());
-        responseDto.setCreatedAt(createPayDto.getCreatedAt());
+        responseDto.setCreatedAt(ZonedDateTime.now().toEpochSecond());
         if (optionalAccountEntity.isEmpty()) {
-            throw new IllegalArgumentException("user_id is not exist or not created!");
+            throw new IllegalArgumentException("account is not exist or not regist payment!");
         } else if (optionalAccountEntity.get().getAmount().compareTo(createPayDto.getPrice()) < 1) {
             responseDto.setStatus(PaymentStatus.FAILED);
-            responseDto.setMessage("Amount of user is not enough for payment please deposit!");
+            responseDto.setMessage("Amount of account is not enough for payment please deposit!");
         } else {
             responseDto.setStatus(PaymentStatus.SUCCESS);
             responseDto.setMessage("Pay successfully!");
@@ -70,6 +77,12 @@ public class PaymentServiceImp {
         }
         paymentHistoryJpaRepository.save(PaymentHistoryMapper.convertCreatePayResponseDto(createPayDto, responseDto, optionalAccountEntity.get(), PaymentsHistoryOperator.PAY));
 
+        String bookingNotify = bookingHost + NOTIFY_PAID_API.replace("{id}", createPayDto.getBookingId());
+        System.out.println("Send notice to bookingNotify " + bookingNotify);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.put(bookingNotify, null);
+        System.out.println("End send notice to bookingNotify");
+
         return responseDto;
     }
 
@@ -78,10 +91,8 @@ public class PaymentServiceImp {
 
         CreatePayReqDto createPayReqDto = new CreatePayReqDto();
         createPayReqDto.setPrice(reqDto.getPrice());
-        createPayReqDto.setRequestId(UUID.randomUUID().toString());
 
         CreatePayResponseDto payResponseDto = new CreatePayResponseDto();
-        payResponseDto.setRequestId(createPayReqDto.getRequestId());
         payResponseDto.setCreatedAt(ZonedDateTime.now().toEpochSecond());
         if (optionalAccountEntity.isEmpty()) {
             throw new IllegalArgumentException("account is not exist or not created!");

@@ -16,9 +16,6 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class CreatePayReqDto {
-    private String account;
     private String bookingId;
-    private String requestId;
     private BigDecimal price;
-    private Long createdAt;
 }

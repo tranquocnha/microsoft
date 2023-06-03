@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class CreatePayResponseDto {
-    private String requestId;
+    private String bookingId;
     private BigDecimal price;
     private Long createdAt;
     private PaymentStatus status;

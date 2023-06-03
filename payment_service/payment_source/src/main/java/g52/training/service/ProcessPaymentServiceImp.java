@@ -28,8 +28,8 @@ public class ProcessPaymentServiceImp {
     private final PaymentHistoryJpaRepository paymentHistoryJpaRepository;
     private final AccountJpaRepository accountJpaRepository;
     private final String NOTIFY_PAID_API = "/api/bookings/{id}/paycomplete";
-    @Scheduled(fixedRate = 3000,
-            initialDelay = 3000)
+//    @Scheduled(fixedRate = 3000,
+//            initialDelay = 3000)
     synchronized public void processPaymentSchedule() {
         List<PaymentHistoryEntity> list = paymentHistoryJpaRepository.findAllByStatusAndRetryLessThan(PaymentStatus.WAIT, 3);
         List<String> requestIdNotify = new ArrayList<>();

@@ -19,7 +19,7 @@ public final class PaymentHistoryMapper {
         return PaymentHistoryEntity.builder()
                 .account(accountEntity.getAccount())
                 .bookingId(reqDto.getBookingId())
-                .requestId(reqDto.getRequestId())
+                .requestId(reqDto.getBookingId())
                 .price(reqDto.getPrice())
                 .status(responseDto.getStatus())
                 .retry(0L)
