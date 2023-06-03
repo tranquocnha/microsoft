@@ -25,6 +25,10 @@ public class JwtService {
     return publicKey;
   }
   
+  public String extractUsername(String token) {
+    return extractClaim(token, Claims::getSubject);
+  }
+  
   private Date extractExpiration(String token) {
     return extractClaim(token, Claims::getExpiration);
   }
