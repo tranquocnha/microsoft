@@ -39,7 +39,7 @@ public class AuthController {
 
   private final JwtUtils jwtUtils;
   
-  //@PostConstruct
+  @PostConstruct
   private void postConstruct() throws Exception {
     register(new UsersRequest("Admin", "Admin", "admin@fpt.com", "admin", "ROLE_ADMIN"));
     register(new UsersRequest("Uesr", "User", "user@fpt.com", "user", "ROLE_USER"));
