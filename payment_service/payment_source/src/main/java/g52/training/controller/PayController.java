@@ -20,12 +20,14 @@ public class PayController {
 
     @PostMapping(value = "/pay-booking")
     public ResponseEntity<HistoryResponseDto> payBooking(@RequestBody CreatePayReqDto createPayDto) {
+        paymentServiceImp.registPayment(SecurityContextHolder.getContext().getAuthentication().getName());
         paymentServiceImp.makePayment(SecurityContextHolder.getContext().getAuthentication().getName(), createPayDto);
         return ResponseEntity.ok(paymentServiceImp.getHistory(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @PostMapping(value = "/deposit")
     public ResponseEntity<HistoryResponseDto> deposit(@RequestBody DepositReqDto depositReqDto) {
+        paymentServiceImp.registPayment(SecurityContextHolder.getContext().getAuthentication().getName());
         paymentServiceImp.deposit(SecurityContextHolder.getContext().getAuthentication().getName(), depositReqDto);
         return ResponseEntity.ok(paymentServiceImp.getHistory(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
@@ -38,6 +40,7 @@ public class PayController {
 
     @GetMapping(value = "/histories")
     public ResponseEntity<HistoryResponseDto> getHistory() {
+        paymentServiceImp.registPayment(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(paymentServiceImp.getHistory(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
