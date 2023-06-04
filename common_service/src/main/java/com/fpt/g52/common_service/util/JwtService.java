@@ -21,7 +21,7 @@ public class JwtService {
     return !isTokenExpired(token);
   }
 
-  public PublicKey getPublicKey() {
+  private PublicKey getPublicKey() {
     return publicKey;
   }
   
