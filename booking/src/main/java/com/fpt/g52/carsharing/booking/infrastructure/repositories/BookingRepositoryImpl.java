@@ -34,7 +34,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public  Optional<Booking> findByVehicleIdAndDuration(String id, Long from, Long to) {
-        return repository.findByVehicleIdAndDuration(id, from, to);
+        return repository.findByVehicleIdAndDuration(id, from, to + 1);
     }
 
     @Override
