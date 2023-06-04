@@ -21,7 +21,6 @@ import com.fpt.microservices.security.model.UserSecurity;
 import com.fpt.microservices.security.users.model.Users;
 import com.fpt.microservices.security.users.model.UsersRequest;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +37,6 @@ public class AuthController {
   private final AuthService authService;
 
   private final JwtUtils jwtUtils;
-  
-  //@PostConstruct
-  private void postConstruct() throws Exception {
-    register(new UsersRequest("Admin", "Admin", "admin@fpt.com", "admin", "ROLE_ADMIN"));
-    register(new UsersRequest("Uesr", "User", "user@fpt.com", "user", "ROLE_USER"));
-    register(new UsersRequest("Manager", "Manager", "manager@fpt.com", "manager", "ROLE_ADMIN,ROLE_USER"));
-  }
 
   @PostMapping("/login")
   public String authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
