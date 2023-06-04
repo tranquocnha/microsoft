@@ -43,7 +43,7 @@ public final class PaymentHistoryMapper {
     }
 
     public static History convertCreatePayResponseDto(PaymentHistoryEntity entity) {
-        return new History(entity.getBookingId(), entity.getRequestId(), entity.getPrice(), entity.getStatus(), entity.getOperator(), entity.getMessage());
+        return new History(entity.getBookingId(), entity.getRequestId(), entity.getPrice(), entity.getStatus(), entity.getOperator(), entity.getMessage(), entity.getCreatedAt().toInstant().toEpochMilli());
     }
 
 }

@@ -19,4 +19,5 @@ public class History {
     private PaymentStatus status;
     private PaymentsHistoryOperator operator;
     private String message;
+    private Long createAt;
 }
