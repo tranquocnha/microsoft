@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   app:
-    image: tranquocnha180800/docker-springboot-microsoft:v12
+    image: tranquocnha180800/docker-springboot-microsoft:v13
     container_name: docker-springboot-microsoft
 #    build:
 #      context: ./vehicle_service/web
