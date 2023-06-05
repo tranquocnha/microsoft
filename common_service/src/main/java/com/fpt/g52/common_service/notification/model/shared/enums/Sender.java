@@ -1,4 +1,4 @@
-package com.g52.microservice.notification.model.shared.enums;
+package com.fpt.g52.common_service.notification.model.shared.enums;
 
 public enum Sender {
   BOOKING_SERVICE,

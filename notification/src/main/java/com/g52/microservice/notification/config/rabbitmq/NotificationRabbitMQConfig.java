@@ -1,7 +1,7 @@
 package com.g52.microservice.notification.config.rabbitmq;
 
+import com.fpt.g52.common_service.notification.model.shared.constant.NotificationSharedConstant;
 import com.g52.microservice.notification.constant.NotificationConstant;
-import com.g52.microservice.notification.model.shared.constant.NotificationSharedConstant;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;

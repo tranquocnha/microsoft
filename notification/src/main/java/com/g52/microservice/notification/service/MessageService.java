@@ -1,8 +1,8 @@
 package com.g52.microservice.notification.service;
 
+import com.fpt.g52.common_service.notification.model.shared.payload.rabbitmq.OrderPayload;
 import com.g52.microservice.notification.model.entity.Message;
 import com.g52.microservice.notification.model.enums.MessageType;
-import com.g52.microservice.notification.model.shared.payload.rabbitmq.OrderPayload;
 import com.g52.microservice.notification.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

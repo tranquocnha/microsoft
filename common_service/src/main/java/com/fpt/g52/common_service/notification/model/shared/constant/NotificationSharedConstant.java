@@ -1,4 +1,4 @@
-package com.g52.microservice.notification.model.shared.constant;
+package com.fpt.g52.common_service.notification.model.shared.constant;
 
 public interface NotificationSharedConstant {
   // for rabbitMQ

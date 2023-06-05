@@ -1,7 +1,8 @@
 package com.g52.microservice.notification.controller;
 
-import com.g52.microservice.notification.model.shared.constant.NotificationSharedConstant;
-import com.g52.microservice.notification.model.shared.payload.rabbitmq.OrderPayload;
+
+import com.fpt.g52.common_service.notification.model.shared.constant.NotificationSharedConstant;
+import com.fpt.g52.common_service.notification.model.shared.payload.rabbitmq.OrderPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
