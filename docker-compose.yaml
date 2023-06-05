@@ -157,7 +157,7 @@ services:
     restart: on-failure
   identity:
     #image: tranquocnha180800/identity-service:v1
-    image: johnnguyen269/identity-service:v3
+    image: johnnguyen269/identity-service:v4
     container_name: identity-service
     ports:
       - "8082:8082"
