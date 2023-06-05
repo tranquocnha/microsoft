@@ -19,14 +19,14 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
     restart: on-failure
-  identity:
-    image: tranquocnha180800/identity-service:v1
-    container_name: identity-service
+  #identity:
+    #image: tranquocnha180800/identity-service:v1
+    #container_name: identity-service
 #    build:
 #      context: .
 #      dockerfile: docker-file.yml
-    ports:
-      - "8082:8082"
+    #ports:
+      #- "8082:8082"
   db:
     image: 'postgres:13-alpine'
     container_name: dbpostgres
@@ -155,6 +155,32 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
     restart: on-failure
+  identity:
+    #image: tranquocnha180800/identity-service:v1
+    image: johnnguyen269/identity-service:v3
+    container_name: identity-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - identitydb
+    environment:
+      - DB_URL=jdbc:mysql://identitydb:3306/identitydb?createDatabaseIfNotExist=true
+      - DB_USER=root
+      - DB_PASSWORD=root
+    restart: on-failure
+  identitydb:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=identitydb
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    volumes:
+      - identitydb:/var/lib/mysql
+     # - ./identitydb/init.sql:/docker-entrypoint-initdb.d/init.sql
 networks:
   spring-pgsql:
     driver: bridge
@@ -163,3 +189,4 @@ volumes:
   local_pgdata:
   pgadmin-data:
   booking_data:
+  identitydb:
