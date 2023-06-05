@@ -1,0 +1,59 @@
+# server configurations
+server:
+  tomcat:
+    accept-count: 20
+    threads:
+      max: 20
+
+# spring configurations
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/notification?cachePrepStmts=true&useServerPrepStmts=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true
+    password: Ilove@123
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: select 1
+      connectionTimeout: 120000
+      idleTimeout: 1200000
+      maxLifetime: 2400000
+      maximum-pool-size: 5
+      minimum-idle: 5
+      pool-name: notification
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+  rabbitmq:
+    host: 178.128.223.53
+    username: root
+    password: Ilove@123
+    port: 5672
+    listener:
+      simple:
+        acknowledge-mode: auto
+        concurrency: 1
+        max-concurrency: 5
+        retry:
+          enabled: true
+          initial-interval: 2s
+          max-attempts: 3
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    enabled: true
+  jackson:
+    # Date format string or a fully-qualified date format class name. For instance, 'yyyy-MM-dd HH:mm:ss'
+    date-format: "yyyy-MM-dd HH:mm:ss"
+
+# others configurations
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+    liquibase: INFO
