@@ -5,6 +5,9 @@ import g52.training.dto.createpay.CreatePayReqDto;
 import g52.training.dto.deposit.DepositReqDto;
 import g52.training.dto.deposit.DepositResponseDto;
 import g52.training.dto.history.HistoryResponseDto;
+import g52.training.dto.registbooking.RegistBookingReqDto;
+import g52.training.dto.registbooking.RegistBookingResponseDto;
+import g52.training.dto.viewamount.ViewAmountResponseDto;
 import g52.training.service.PaymentServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +35,15 @@ public class PayController {
         return ResponseEntity.ok(paymentServiceImp.getHistory(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
-    @PostMapping(value = "/regist-payment")
-    public ResponseEntity<Boolean> registPayment() {
-        return ResponseEntity.ok(paymentServiceImp.registPayment(SecurityContextHolder.getContext().getAuthentication().getName()));
+    @GetMapping(value = "/view-amount")
+    public ResponseEntity<ViewAmountResponseDto> viewAmount() {
+        return ResponseEntity.ok(paymentServiceImp.viewAmount(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
+    @PostMapping(value = "/regist-booking")
+    public ResponseEntity<RegistBookingResponseDto> registBooking(@RequestBody RegistBookingReqDto reqDto) {
+        paymentServiceImp.registPayment(SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok(paymentServiceImp.registBooking(SecurityContextHolder.getContext().getAuthentication().getName(), reqDto));
     }
 
 

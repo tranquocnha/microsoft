@@ -2,6 +2,9 @@ package g52.training.config;
 
 //import org.springframework.context.annotation.Bean;
 
+import com.fpt.g52.common_service.util.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,15 +35,23 @@ public class SercurityConfig extends WebSecurityConfigurerAdapter {
                 anyRequest().authenticated().
                 and().
                 sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**");
     }
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
 
+////    @Bean
+//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+//        return new JwtAuthenticationFilter();
+//    }
+    @Autowired
+    public JwtAuthenticationFilter jwtAuthenticationFilter;
+
+//    @Bean
+//    public JwtService jwtService() {
+//        return new JwtService();
+//    }
 }

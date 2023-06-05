@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PaymentHistoryJpaRepository extends JpaRepository<PaymentHistoryEntity, Long> {
     List<PaymentHistoryEntity> findAllByAccount(String account);
 
     List<PaymentHistoryEntity> findAllByStatusAndRetryLessThan(PaymentStatus status, long retry);
+
+    Optional<PaymentHistoryEntity> findPaymentHistoryEntityByBookingId(final String bookingId);
 }

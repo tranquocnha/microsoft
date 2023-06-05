@@ -1,10 +1,14 @@
 package g52.training.config;
 
+import com.fpt.g52.common_service.util.JwtService;
 import g52.training.service.JwtUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -14,7 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@ComponentScan("com.fpt.g52.common_service.util")
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+	@Autowired
+	private JwtService jwtService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -26,7 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {
-				username = JwtUtils.extractUsername(jwtToken);
+				username = jwtService.extractUsername(jwtToken);
+				System.out.println(jwtService.validateToken(jwtToken));
 			} catch (IllegalArgumentException e) {
 				System.out.println("Unable to get JWT Token");
 			} catch (ExpiredJwtException e) {
@@ -38,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		if (username != null
 				&& SecurityContextHolder.getContext().getAuthentication() == null
-				&& !JwtUtils.isTokenExpired(jwtToken)) {
+				&& JwtUtils.validateToken(jwtToken)) {
 			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 					username, null, new ArrayList<>());
 			usernamePasswordAuthenticationToken

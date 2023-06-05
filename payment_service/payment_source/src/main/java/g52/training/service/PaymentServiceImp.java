@@ -3,23 +3,20 @@ package g52.training.service;
 import g52.training.dto.createpay.CreatePayReqDto;
 import g52.training.dto.createpay.CreatePayResponseDto;
 import g52.training.dto.deposit.DepositReqDto;
-import g52.training.dto.deposit.DepositResponseDto;
 import g52.training.dto.history.History;
-import g52.training.dto.history.HistoryReqDto;
 import g52.training.dto.history.HistoryResponseDto;
-import g52.training.dto.viewamount.ViewAmountReqDto;
+import g52.training.dto.registbooking.RegistBookingReqDto;
+import g52.training.dto.registbooking.RegistBookingResponseDto;
 import g52.training.dto.viewamount.ViewAmountResponseDto;
 import g52.training.entity.AccountEntity;
 import g52.training.entity.PaymentHistoryEntity;
 import g52.training.mapper.PaymentHistoryMapper;
 import g52.training.repository.AccountJpaRepository;
 import g52.training.repository.PaymentHistoryJpaRepository;
-import g52.training.repository.PaymentHistoryScheduleJpaRepository;
 import g52.training.valueobject.PaymentStatus;
 import g52.training.valueobject.PaymentsHistoryOperator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,7 +24,6 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -133,5 +129,35 @@ public class PaymentServiceImp {
         viewAmountResponseDto.setAccount(optionalAccountEntity.get().getAccount());
         viewAmountResponseDto.setAmount(optionalAccountEntity.get().getAmount());
         return viewAmountResponseDto;
+    }
+
+    public RegistBookingResponseDto registBooking(String account, RegistBookingReqDto reqDto) {
+        Optional<AccountEntity> optionalAccountEntity = accountJpaRepository.findAccountEntityByAccount(account);
+        if (optionalAccountEntity.isEmpty()){
+            throw new IllegalArgumentException("account is not exist or not created!");
+        }
+        Optional<PaymentHistoryEntity> optionalPaymentHistoryEntity =
+                paymentHistoryJpaRepository.findPaymentHistoryEntityByBookingId(reqDto.getBookingId());
+        PaymentHistoryEntity paymentHistoryEntity = null;
+        if (optionalPaymentHistoryEntity.isEmpty()) {
+            paymentHistoryEntity = new PaymentHistoryEntity();
+            paymentHistoryEntity.setAccount(account);
+            paymentHistoryEntity.setBookingId(reqDto.getBookingId());
+            paymentHistoryEntity.setPrice(reqDto.getPrice());
+            paymentHistoryEntity.setStatus(PaymentStatus.WAIT);
+            paymentHistoryJpaRepository.save(paymentHistoryEntity);
+        } else {
+            paymentHistoryEntity = optionalPaymentHistoryEntity.get();
+        }
+
+        RegistBookingResponseDto res = new RegistBookingResponseDto(
+                paymentHistoryEntity.getBookingId(),
+                paymentHistoryEntity.getPrice(),
+                paymentHistoryEntity.getStatus(),
+                paymentHistoryEntity.getAccount(),
+                optionalAccountEntity.get().getAmount()
+        );
+
+        return res;
     }
 }
