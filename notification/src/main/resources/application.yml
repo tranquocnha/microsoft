@@ -1,0 +1,6 @@
+# application configurations
+server:
+  port: 9999
+spring:
+  profiles:
+    active: prod
