@@ -45,7 +45,7 @@ spring:
           max-attempts: 3
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
-    enabled: true
+    enabled: false
 
 # others configurations
 logging:

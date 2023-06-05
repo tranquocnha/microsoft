@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class VehiclesHourDTO {
-    private int vehiclesHourId ;
-    private Boolean status;
+  private int vehiclesHourId;
+  private Boolean status;
 }

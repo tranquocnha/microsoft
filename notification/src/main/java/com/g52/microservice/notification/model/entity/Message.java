@@ -1,5 +1,6 @@
 package com.g52.microservice.notification.model.entity;
 
+import com.fpt.g52.common_service.notification.model.shared.enums.PaymentStatus;
 import com.g52.microservice.notification.model.enums.MessageType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +17,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Table(name = "message")
@@ -39,7 +41,10 @@ public class Message implements Serializable {
 
   private String bookingId;
 
-  private String payload;
+  private BigDecimal price;
+
+  @Enumerated(EnumType.STRING)
+  private PaymentStatus paymentStatus;
 
   @Enumerated(EnumType.STRING)
   private MessageType messageType;

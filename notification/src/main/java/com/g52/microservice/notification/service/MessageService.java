@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,8 @@ public class MessageService {
         .setMessageType(MessageType.ORDER_PAYMENT)
         .setConsumed(false)
         .setBookingId(payload.getBookingId())
-        .setPayload(payload.toString())
+        .setPrice(payload.getPrice())
+        .setPaymentStatus(payload.getPaymentStatus())
         .setReceiver(payload.getReceiver())
         .setSender(payload.getSender().name())
         .setCreatedAt(now)
@@ -47,10 +49,14 @@ public class MessageService {
         });
     LocalDateTime now = LocalDateTime.now();
     existedMessage.setSender(payload.getSender().name());
-    existedMessage.setPayload(payload.toString());
+    existedMessage.setPaymentStatus(payload.getPaymentStatus());
     existedMessage.setUpdatedAt(now);
     existedMessage.setConsumed(true);
 
     messageRepository.save(existedMessage);
+  }
+
+  public List<Message> listMessageByReceiver(String receiver) {
+    return this.messageRepository.findAllByReceiverOrderByIdDesc(receiver);
   }
 }

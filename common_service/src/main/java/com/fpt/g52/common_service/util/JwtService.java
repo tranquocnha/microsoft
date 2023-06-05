@@ -1,22 +1,21 @@
 package com.fpt.g52.common_service.util;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.function.Function;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-
 @Component
 public class JwtService {
 
-  @Value("classpath:certs/public.pem") 
+  @Value("classpath:certs/public.pem")
   private RSAPublicKey publicKey;
-  
+
   public Boolean validateToken(String token) {
     return !isTokenExpired(token);
   }
@@ -24,11 +23,11 @@ public class JwtService {
   private PublicKey getPublicKey() {
     return publicKey;
   }
-  
+
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
   }
-  
+
   private Date extractExpiration(String token) {
     return extractClaim(token, Claims::getExpiration);
   }
