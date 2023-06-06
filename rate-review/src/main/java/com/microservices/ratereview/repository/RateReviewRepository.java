@@ -16,7 +16,7 @@ public interface RateReviewRepository extends JpaRepository<HistoryRateReviewEnt
 
     public List<HistoryRateReviewEntity> findByIdVehicleAndFlagReview(String idVehicle, int flagReview);
     
-    public List<HistoryRateReviewEntity> findByIdUserAndStatusBooking(String idUser);
+    public List<HistoryRateReviewEntity> findByIdUser(String idUser);
     
     public HistoryRateReviewEntity findByIdLog(int idLog);
     public HistoryRateReviewEntity findByIdBooking(String idBooking);
