@@ -65,7 +65,7 @@ services:
     networks:
       - spring-pgsql
     ports:
-      - "54320:54320"
+      - "54320:5432"
     environment:
       - POSTGRES_PASSWORD=mypassword
       - POSTGRES_USER=myusername
@@ -122,7 +122,7 @@ services:
       - spring-pgsql
   app_booking:
     container_name: app-booking-service
-    image: tuannd1058/booking-service:v2
+    image: vinh2ditbk/booking-service:v2
     restart: on-failure
     ports:
       - 8088:8088
@@ -136,6 +136,7 @@ services:
       - DB_DATABASE=booking
       - DB_USERNAME=postgres
       - DB_PASSWORD=admin
+      - VEHICLE_HOST=http://docker-springboot-microsoft:8080
     networks:
       - spring-pgsql
 

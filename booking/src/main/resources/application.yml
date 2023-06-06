@@ -49,7 +49,7 @@ springdoc:
 service:
   vehicle:
     local:
-      domain: http://localhost:8080
+      domain: ${VEHICLE_HOST:http://localhost:8080}
       url: /v1/api/vehicles/
   identity:
     local:
