@@ -83,7 +83,7 @@ public class RateReviewService {
     
     //Get review by id User
     public List<HistoryRateReviewDTO> getReviewByUser(String idUser){
-    	return rateReviewRepository.findByIdUserAndStatusBooking(idUser, "BOOKED").stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
+    	return rateReviewRepository.findByIdUserAndStatusBooking(idUser).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
                 .collect(Collectors.toList());
     }
     
