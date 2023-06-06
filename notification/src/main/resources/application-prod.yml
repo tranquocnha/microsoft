@@ -10,8 +10,8 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/notification?cachePrepStmts=true&useServerPrepStmts=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true
-    password: Ilove@123
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:13306/notification?cachePrepStmts=true&useServerPrepStmts=true&rewriteBatchedStatements=true&useSSL=false&allowPublicKeyRetrieval=true
+    password: P@ssw0rd
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:

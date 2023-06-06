@@ -182,12 +182,46 @@ services:
     volumes:
       - identitydb:/var/lib/mysql
      # - ./identitydb/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # notification service config
+  # app
+  notification-app:
+    image: vinh2ditbk/notification-service:v1
+    container_name: notification-service
+    ports:
+      - "9999:9999"
+    depends_on:
+      - notification-db
+    restart: on-failure
+    networks:
+      - spring-pgsql
+
+  notification-db:
+    image: mysql:8.0
+    container_name: notification-db
+    networks:
+      - spring-pgsql
+    ports:
+      - 13306:3306
+    volumes:
+      - notification-data:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=P@ssw0rd
+      - MYSQL_ROOT_USER=root
+      - MYSQL_DATABASE=notification
+
+# networks config
 networks:
   spring-pgsql:
     driver: bridge
 
+# volumes config
 volumes:
   local_pgdata:
   pgadmin-data:
   booking_data:
   identitydb:
+  notification-data:
