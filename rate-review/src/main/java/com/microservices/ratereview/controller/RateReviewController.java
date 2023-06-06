@@ -55,7 +55,7 @@ public class RateReviewController {
     }
     // Test rabbit
     @PostMapping(value = "/testmq1")
-    public ResponseEntity<String> publishUserDetails(@RequestBody String message) {
+    public ResponseEntity<String> publishUserDetails1(@RequestBody RabbitDTO message) {
         rabbitMqSender.sendJsonMessage1(message);
         return ResponseEntity.ok("Json message sent to RabbitMQ ...");
     }

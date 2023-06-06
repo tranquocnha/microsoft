@@ -26,7 +26,7 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.json.name}")
     private String jsonQueue;
     @Value("${rabbitmq.queue.name}")
-    private String queue;
+    private String jsonQueueStart;
 
     @Value("${ratereview.complete.key}")
     private String ratereviewComplete;
@@ -35,8 +35,8 @@ public class RabbitMQConfig {
     
     // spring bean for rabbitmq queue
     @Bean
-    public Queue queue(){
-        return new Queue(queue);
+    public Queue jsonQueueStart(){
+        return new Queue(jsonQueueStart);
     }
     @Bean
     public Queue dlqQueue(){
@@ -60,9 +60,9 @@ public class RabbitMQConfig {
     }
     // binding between queue and exchange using routing key
     @Bean
-    public Binding binding(){
+    public Binding jsonBindingStart(){
         return BindingBuilder
-                .bind(queue())
+                .bind(jsonQueueStart())
                 .to(exchange())
                 .with(ratereviewComplete);
     }

@@ -72,20 +72,20 @@ public class RabbitMqReceiver {
     }
     
     @RabbitListener(queues = {"${rabbitmq.queue.name}"})
-    public void updateStatusBooking(@Payload String idBooking, Channel channel,
+    public void updateStatusBooking(@Payload RabbitDTO rbDto, Channel channel,
             @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {// data input
         
         try {
             System.out.println("idd: " + deliveryTag);
-            if (idBooking == null || "".equals(idBooking)) {
+            if (rbDto.getId() == null || "".equals(rbDto.getId())) {
             	throw new NullPointerException();
             }
-            logger.info(String.format("Received INPUT -> %s", idBooking));
-            rateReviewService.updateStatusBooking(idBooking);
+            logger.info(String.format("Received INPUT updateStatusBooking -> %s", rbDto.getId()));
+            rateReviewService.updateStatusBooking(rbDto.getId());
             channel.basicAck(deliveryTag, false);
         }
         catch(Exception e) {
-            sender.sendMessage(new Mess(idBooking));
+            sender.sendMessage(new Mess(rbDto.getId()));
         	try {
 				channel.basicAck(deliveryTag, false);
 			} catch (IOException e1) {

@@ -39,7 +39,7 @@ public class RabbitMQSender {
         LOGGER.info(String.format("Message sent -> %s", str));
         rabbitTemplate.convertAndSend(exchange, routingJsonKey, str);
     }
-    public void sendJsonMessage1(String str){
+    public void sendJsonMessage1(RabbitDTO str){
         LOGGER.info(String.format("Message sent -> %s", str));
         rabbitTemplate.convertAndSend(exchange1, routingKey, str);
     }
