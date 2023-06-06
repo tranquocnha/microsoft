@@ -10,24 +10,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
-#rabbitmq conf
   rabbitmq:
     host: 178.128.223.53
     port: 5672
     username: guest
     password: 123456
-  listener:
-    simple:
-      acknowledge-mode: manual
-      max-concurrency: 10
-      concurrency: 2
-      retry:
-        enabled: true
-        initial-interval: 3s
-        max-attempts: 3
-        max-interval: 10s
-        multiplier: 2
+    listener:
+      simple:
+        acknowledge-mode: auto
+        concurrency: 3
+        max-concurrency: 10
+        retry:
+          enabled: true
+          initial-interval: 2s
+          max-attempts: 3
 
 rabbitmq:
   payment:
@@ -42,6 +38,10 @@ rabbitmq:
     queue : ratereview-complete
     exchange: ratereview-exchange
     routingkey: ratereview_complete_key
+  notice:
+    queue : notify.order.payment.topic.queue
+    exchange: notify.topic.exchange
+    routingkey: notify.order.payment.routing.key
 
 springdoc:
   api-docs:

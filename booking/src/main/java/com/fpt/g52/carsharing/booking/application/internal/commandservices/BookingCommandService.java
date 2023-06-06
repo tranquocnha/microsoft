@@ -15,23 +15,26 @@ import com.fpt.g52.carsharing.booking.domain.model.commands.BookingCommand;
 import com.fpt.g52.carsharing.booking.domain.model.valueobjects.BookingStatus;
 import com.fpt.g52.carsharing.booking.domain.model.valueobjects.PaymentStatus;
 import com.fpt.g52.carsharing.booking.domain.repositories.BookingRepository;
+import com.fpt.g52.common_service.notification.model.shared.enums.Sender;
+import com.fpt.g52.common_service.notification.model.shared.payload.rabbitmq.OrderPayload;
 
 @Service
 public class BookingCommandService {
 
     private final BookingRepository repository;
     
-    private final UserService userService;
 
     private final RabbitMQService<Booking> mqService;
+    private final RabbitMQService<OrderPayload> mqServiceToPayment;
     
-    public BookingCommandService(BookingRepository repository, UserService userService, RabbitMQService<Booking> mqService) {
-        this.repository = repository;
-        this.userService = userService;
-        this.mqService = mqService;
-    }
+	public BookingCommandService(BookingRepository repository, RabbitMQService<Booking> mqService,
+			RabbitMQService<OrderPayload> mqServiceToPayment) {
+		this.repository = repository;
+		this.mqService = mqService;
+		this.mqServiceToPayment = mqServiceToPayment;
+	}
 
-    public Booking book(BookingCommand command) throws Exception {
+	public Booking book(BookingCommand command) throws Exception {
         
     	boolean isExist = repository.findByVehicleIdAndDuration(command.getVehicleId(), command.getBookingFrom(), command.getBookingTo()).isEmpty() ;
     	long currentTime = System.currentTimeMillis();
@@ -40,8 +43,16 @@ public class BookingCommandService {
     	}
     	
         Booking booking = new Booking(command);
-        mqService.sendtoPayment(booking);
+        OrderPayload noticePayload = new OrderPayload();
+        noticePayload.setSender(Sender.BOOKING_SERVICE);
+        noticePayload.setReceiver(booking.getAccount().getId());
+        noticePayload.setBookingId(booking.getId());
+        noticePayload.setPrice(booking.getPrice().getPrice());
+        noticePayload.setPaymentStatus(com.fpt.g52.common_service.notification.model.shared.enums.PaymentStatus.WAITING);
+//        mqService.sendtoPayment(booking);
         mqService.sendtoReview(booking);
+        mqServiceToPayment.sendtoNotice(noticePayload);
+       
         return repository.save(booking);
     }
 

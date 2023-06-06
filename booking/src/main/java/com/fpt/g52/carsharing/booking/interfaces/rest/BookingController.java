@@ -65,7 +65,7 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<MessageResponse> book(
-            @RequestBody @Valid BookingRequest request, @RequestHeader(name = "token") String token
+            @RequestBody @Valid BookingRequest request, @RequestHeader(name = "Authorization") String token
     ) throws Exception {
         
         // get vehicle info
@@ -90,7 +90,7 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingResponse>> search(
             @RequestParam("query") String query,
-            Pageable pageable, @RequestHeader(name = "token") String token
+            Pageable pageable, @RequestHeader(name = "Authorization") String token
     ) {
         // get user info from token
         User userLogin = getUserInfo(token);
@@ -110,7 +110,7 @@ public class BookingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> findById(
-            @PathVariable("id") String id, @RequestHeader(name = "token") String token
+            @PathVariable("id") String id, @RequestHeader(name = "Authorization") String token
     ) {
         User userLogin = getUserInfo(token);
         Booking booking = queryService.findById(id, userLogin.getId());
@@ -119,7 +119,7 @@ public class BookingController {
 
     @PutMapping("/{id}/receive")
     public ResponseEntity<MessageResponse> receive(
-            @PathVariable("id") String id, @RequestHeader(name = "token") String token
+            @PathVariable("id") String id, @RequestHeader(name = "Authorization") String token
     ) {
         User userLogin = getUserInfo(token);
         commandService.receive(id, userLogin.getId());
@@ -128,7 +128,7 @@ public class BookingController {
 
     @PutMapping("/{id}/complete")
     public ResponseEntity<MessageResponse> complete(
-            @PathVariable("id") String id, @RequestHeader(name = "token") String token
+            @PathVariable("id") String id, @RequestHeader(name = "Authorization") String token
     ) {
         User userLogin = getUserInfo(token);
         commandService.complete(id, userLogin.getId());
@@ -160,7 +160,7 @@ public class BookingController {
 
     @GetMapping("/un-payment/")
     public ResponseEntity<List<String>> findByPaymentStatusAndAccount(
-           Pageable pageable, @RequestHeader(name = "token") String token
+           Pageable pageable, @RequestHeader(name = "Authorization") String token
     ) {
         User userLogin = getUserInfo(token);
         Page<Booking>  page = queryService.findByPaymentStatusAndAccount(userLogin.getId(), pageable); 

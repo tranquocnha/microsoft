@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.fpt.g52.common_service.notification.model.shared.constant.NotificationSharedConstant;
+
 @Service
 public class RabbitMQService<T> {
 
@@ -39,5 +41,9 @@ public class RabbitMQService<T> {
     
     public void sendtoReviewCmpt(T t) {
         rabbitTemplate.convertAndSend(reviewCmptExchange, reviewCmptRoutingkey, t);
+    }
+    
+    public void sendtoNotice(T t) {
+        rabbitTemplate.convertAndSend(NotificationSharedConstant.NOTIFY_TOPIC_EXCHANGE, NotificationSharedConstant.NOTIFY_ORDER_PAYMENT_ROUTING_KEY, t);
     }
 }

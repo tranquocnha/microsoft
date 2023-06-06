@@ -22,12 +22,15 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleAllException(Exception ex) {
-        return ResponseEntity.internalServerError()
-                .build();
+//        return ResponseEntity.internalServerError()
+//                .build();
+    	ex.printStackTrace();
+        return new ResponseEntity<>(new ErrorMessage(Arrays.asList(ex.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ResourceInvalidException.class)
     public ResponseEntity<ErrorMessage> handleResourceInvalidException(ResourceInvalidException ex) {
+    	ex.printStackTrace();
     	return new ResponseEntity<>(new ErrorMessage(Arrays.asList(ex.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
