@@ -38,7 +38,7 @@ public class BookingCommandService {
         
     	boolean isExist = repository.findByVehicleIdAndDuration(command.getVehicleId(), command.getBookingFrom(), command.getBookingTo()).isEmpty() ;
     	long currentTime = System.currentTimeMillis();
-    	if (!isExist || currentTime > command.getBookingFrom() || currentTime > command.getBookingTo()) {
+    	if (!isExist || currentTime > command.getBookingFrom() || currentTime > command.getBookingTo() || command.getBookingFrom()  > command.getBookingTo()) {
     		throw new ResourceInvalidException("duration invalid! Please choose other duration. ");
     	}
     	
