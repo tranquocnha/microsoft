@@ -63,7 +63,7 @@ public class RateReviewService {
     }
     // Get review by id Vehicle
     public List<HistoryRateReviewDTO> getReviewVehicle(String idVehicle) {
-        return rateReviewRepository.findByIdVehicle(idVehicle).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
+        return rateReviewRepository.findByIdVehicleAndFlagReview(idVehicle, 2).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
                 .collect(Collectors.toList());
     }
     
@@ -83,7 +83,7 @@ public class RateReviewService {
     
     //Get review by id User
     public List<HistoryRateReviewDTO> getReviewByUser(String idUser){
-    	return rateReviewRepository.findByIdUser(idUser).stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
+    	return rateReviewRepository.findByIdUserAndStatusBooking(idUser, "COMPLETED").stream().map(hsEn -> modelMapper.map(hsEn, HistoryRateReviewDTO.class))
                 .collect(Collectors.toList());
     }
     

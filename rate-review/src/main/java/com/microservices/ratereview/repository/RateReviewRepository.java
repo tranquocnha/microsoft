@@ -14,8 +14,9 @@ public interface RateReviewRepository extends JpaRepository<HistoryRateReviewEnt
             nativeQuery = true)
     public int avgRateNumVehicle(String idVehicle);
 
-    public List<HistoryRateReviewEntity> findByIdVehicle(String idVehicle);
-    public List<HistoryRateReviewEntity> findByIdUser(String idUser);
+    public List<HistoryRateReviewEntity> findByIdVehicleAndFlagReview(String idVehicle, int flagReview);
+    
+    public List<HistoryRateReviewEntity> findByIdUserAndStatusBooking(String idUser, String statusBooking);
     
     public HistoryRateReviewEntity findByIdLog(int idLog);
     public HistoryRateReviewEntity findByIdBooking(String idBooking);
